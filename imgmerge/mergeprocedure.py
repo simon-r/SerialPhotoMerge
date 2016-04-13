@@ -132,7 +132,7 @@ class MergeRemoveUnwanted( MergeProcedure ):
         std = np.zeros( shape[:2] , dtype=readimg.dtype ) + 256.0
         
         dist = np.zeros( shape[:2] , dtype=readimg.dtype ) 
-        flags = np.zeros( shape[:,2] , dtype=np.bool8 )
+        flags = np.zeros( shape[:2] , dtype=np.bool8 )
     
         iter_cnt = 3 
     
@@ -187,6 +187,9 @@ class MergeRemoveUnwanted( MergeProcedure ):
                 
             std[:] = np.sqrt( std[:] / img_cnt )
             avrimg[:] = 0.0 
+        
+        self.resulting_image = np.array( resimg[:] , dtype=np.uint8 )
+            
         
         
     

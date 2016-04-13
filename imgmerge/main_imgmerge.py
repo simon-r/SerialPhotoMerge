@@ -19,7 +19,7 @@ import os
 import sys
 
 from imgmerge.imagemerge import ImageMerge
-from imgmerge.mergeprocedure import NpMergeProcedure
+from imgmerge.mergeprocedure import NpMergeProcedure, MergeRemoveUnwanted
 
 def main():
     
@@ -41,7 +41,7 @@ def main():
         print(fn)
         mrg.add_image( dn , fn)
     
-    mrg.set_merge_procedure( NpMergeProcedure() )
+    mrg.set_merge_procedure( MergeRemoveUnwanted() )
     mrg.execute_merge()
     
     mrg.save_resulting_image( res_file )
