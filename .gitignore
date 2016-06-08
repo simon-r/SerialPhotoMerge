@@ -9,4 +9,6 @@ build/
 .pydevproject
 .project
 *.jpg
+*.pp3
+
 

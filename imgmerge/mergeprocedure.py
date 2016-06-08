@@ -134,7 +134,7 @@ class MergeRemoveUnwanted( MergeProcedure ):
         dist = np.zeros( shape[:2] , dtype=readimg.dtype ) 
         flags = np.zeros( shape[:2] , dtype=np.bool8 )
     
-        iter_cnt = 3 
+        iter_cnt = 10 
     
         for itr in range( iter_cnt ) :
             invalid_imgs = []
@@ -158,7 +158,8 @@ class MergeRemoveUnwanted( MergeProcedure ):
                                 np.power( resimg[:,:,1] - imgarr[:,:,1] , 2 ) + 
                                 np.power( resimg[:,:,2] - imgarr[:,:,2] , 2 ) )
                     
-                    flags[:] = dist[:] < std[:]
+                    flags[:] = False
+                    flags[:] = dist[:] < std[:] / np.exp( np.float( itr ) / 10.0 )
                     
                     avrimg[flags] = avrimg[flags] + imgarr[flags]
                     

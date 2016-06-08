@@ -49,4 +49,16 @@ class ReadImage( object ):
         else :
             raise Exception( " %s , Undefined file name: " % sys._getframe().f_code.co_name )
         
-        return np.array( ndimage.imread( self._file_name ) , dtype=self._dtype )
+        img_rgb = np.array( ndimage.imread( self._file_name ) , dtype=self._dtype )
+        
+        return img_rgb
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
