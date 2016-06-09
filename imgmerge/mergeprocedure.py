@@ -111,10 +111,7 @@ class NpMergeProcedure( MergeProcedure ):
         resimg[:] = resimg[:] / img_cnt 
         
         self.resulting_image = np.array( resimg[:] , dtype=get_dtype( color_bit ) )
-        
-        #plt.imshow(self._resimg)
-        #plt.show()
-        
+                
         return invalid_imgs
         
         
