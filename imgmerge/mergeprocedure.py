@@ -18,7 +18,7 @@ import numpy as np
 import sys
 
 import scipy.ndimage as ndimage
-from imgmerge.readimg import ReadImage
+from imgmerge.readimg import ReadImageBasic
 
 #import matplotlib.pyplot as plt
 
@@ -56,7 +56,7 @@ class NpMergeProcedure( MergeProcedure ):
     
     def execute(self):
         
-        readimg = ReadImage()
+        readimg = ReadImageBasic()
         
         if len( self.images_list ) == 0 :
             raise Exception( " %s , Empty List" % sys._getframe().f_code.co_name )
@@ -112,7 +112,7 @@ class MergeRemoveUnwanted( MergeProcedure ):
         pass
     
     def execute(self):
-        readimg = ReadImage()
+        readimg = ReadImageBasic()
         
         if len( self.images_list ) == 0 :
             raise Exception( " %s , Empty List" % sys._getframe().f_code.co_name )

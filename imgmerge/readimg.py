@@ -16,30 +16,57 @@
 
 import numpy as np
 import sys
+import os
 
 import scipy.ndimage as ndimage
 
-class ReadImage( object ):
+class ReadImageVirtual( object ):
     def __init__(self):
         self._dtype = np.float32
         self._file_name = None
+        self._supported_formats = []
     
-    def set_file_name(self, file_name):
+    def set_file_name( self, file_name):
         self._file_name = file_name 
         
     def get_file_name(self):
         return self._file_name
     
-    def set_dtype(self, dtype):
+    def set_dtype( self, dtype):
         self._dtype = dtype
         
     def get_dtype(self):
         return self._dtype
     
+    def get_supported_formats(self):
+        NotImplementedError(" %s : is virutal and must be overridden." % sys._getframe().f_code.co_name )
+    
+    def is_supported(self, file_name):
+        foo, file_extension = os.path.splitext(file_name)
+        if file_extension.lower() in self._supported_formats :
+            return True
+        else :
+            return False
+            
+    def _add_supported_formats(self, fmts):
+        self._supported_formats.append( fmts )
+    
     dtype = property( get_dtype, set_dtype)
     
-    file_name = property(get_file_name, set_file_name )
+    file_name = property( get_file_name, set_file_name )
     
+    supported_formats = property( get_supported_formats )
+    
+    def read(self, file_name ):
+        NotImplementedError(" %s : is virutal and must be overridden." % sys._getframe().f_code.co_name ) 
+    
+    
+
+class ReadImageBasic( ReadImageVirtual ):
+    def __init__(self):
+        ReadImageVirtual.__init__(self)
+        ReadImageVirtual._add_supported_formats(self, [ ".jpg" , ".jpeg" , ".png" , ".tiff" ] ) 
+                  
     def read(self, file_name=None):
         
         if file_name != None :
@@ -49,9 +76,44 @@ class ReadImage( object ):
         else :
             raise Exception( " %s , Undefined file name: " % sys._getframe().f_code.co_name )
         
-        img_rgb = np.array( ndimage.imread( self._file_name ) , dtype=self._dtype )
+        img_rgb = np.array( ndimage.imread( self._file_name ) , dtype=self.dtype )
         
         return img_rgb
+    
+    
+class ReadImageRaw( ReadImageVirtual ):
+    def __init__(self):
+        ReadImageVirtual.__init__(self)
+
+        raw_str = """       
+            .3fr,
+            .ari, .arw,
+            .bay,
+            .crw, .cr2,
+            .cap,
+            .data, .dcs, .dcr, .dng,
+            .drf,
+            .eip, .erf,
+            .fff,
+            .iiq,
+            .k25, .kdc,
+            .mdc, .mef, .mos, .mrw,
+            .nef, .nrw,
+            .obm, .orf,
+            .pef, .ptx, .pxn,
+            .r3d, .raf, .raw, .rwl, .rw2, .rwz,
+            .sr2, .srf, .srw,
+            .tif,
+            .x3f
+            """.replace(" ","").replace("\n","")
+       
+        raw_lst = raw_str.split( "," )
+       
+        ReadImageVirtual._add_supported_formats(self, raw_lst )
+        
+    def read(self, file_name=None):
+        pass
+
     
     
     
