@@ -83,9 +83,7 @@ class ReadImageBasic( ReadImageVirtual ):
             raise Exception( " %s , Undefined file name: " % sys._getframe().f_code.co_name )
         
         img_rgb = np.array( ndimage.imread( self._file_name ) , dtype=self.dtype )
-        
-        img_rgb[:] = img_rgb[:] / np.float32(2**8-1)  
-        
+                       
         return ( img_rgb , 8 )
     
     
@@ -123,6 +121,7 @@ class ReadImageRaw( ReadImageVirtual ):
         raw_lst = raw_str.split( "," )
        
         ReadImageVirtual._add_supported_formats(self, raw_lst )
+        
         
     def read(self, file_name=None):
         

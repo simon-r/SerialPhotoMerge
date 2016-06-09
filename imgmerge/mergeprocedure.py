@@ -22,6 +22,11 @@ from imgmerge.readimg import ReadImageBasic
 
 #import matplotlib.pyplot as plt
 
+def get_dtype(color_bits):
+    if color_bits == 8 :
+        return np.uint8
+    elif color_bits == 16 :
+        return np.uint16
 
 class MergeProcedure( object ):
     def __init__(self):
@@ -35,7 +40,7 @@ class MergeProcedure( object ):
         return self._img_list
     
     images_list = property( get_images_list , set_images_list )
-    
+        
     def execute(self):
         NotImplementedError(" %s : is virutal and must be overridden." % sys._getframe().f_code.co_name )
     
@@ -58,13 +63,16 @@ class NpMergeProcedure( MergeProcedure ):
         
         readimg = ReadImageBasic()
         
+        color_bit = 8 
+        
         if len( self.images_list ) == 0 :
             raise Exception( " %s , Empty List" % sys._getframe().f_code.co_name )
         
         while True :
             try :
                 readimg.file_name = self.images_list[0] ;
-                resimg = readimg.read()
+                (resimg, color_bit) = readimg.read()
+                
                 break 
             except :
                 self.images_list.pop(0)
@@ -84,11 +92,14 @@ class NpMergeProcedure( MergeProcedure ):
             
             readimg.file_name = img
             try :
-                imgarr = readimg.read()
+                (imgarr, tmp_bit) = readimg.read()
+                                
+                if tmp_bit != color_bit :
+                    raise Exception() 
                 
                 # discard image if the shape is not equivalent!
                 if shape != imgarr.shape :
-                    continue
+                    raise Exception() 
                  
                 resimg[:] = resimg[:] + imgarr[:]
                 img_cnt += 1.0 
@@ -99,8 +110,8 @@ class NpMergeProcedure( MergeProcedure ):
         
         resimg[:] = resimg[:] / img_cnt 
         
-        self.resulting_image = np.array( resimg[:] , dtype=np.uint8 )
-    
+        self.resulting_image = np.array( resimg[:] , dtype=get_dtype( color_bit ) )
+        
         #plt.imshow(self._resimg)
         #plt.show()
         
