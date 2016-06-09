@@ -20,4 +20,6 @@ class ReadImageFarctory( object ):
     def __init__(self):
         _img_reads = [ ReadImageBasic() , ReadImageRaw() ]
     
+    def get_readimage(self):
+        pass
     
