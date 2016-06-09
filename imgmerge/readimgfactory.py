@@ -18,6 +18,6 @@ from imgmerge.readimg import ReadImageBasic, ReadImageRaw
 
 class ReadImageFarctory( object ):
     def __init__(self):
-        _img_reads = [ ReadImageBasic , ReadImageRaw ]
+        _img_reads = [ ReadImageBasic() , ReadImageRaw() ]
     
     
