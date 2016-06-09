@@ -20,6 +20,12 @@ import os
 
 import scipy.ndimage as ndimage
 
+try:
+    import rawpy
+    __rawpy = True
+except:
+    __rawpy = False
+
 class ReadImageVirtual( object ):
     def __init__(self):
         self._dtype = np.float32
@@ -78,12 +84,19 @@ class ReadImageBasic( ReadImageVirtual ):
         
         img_rgb = np.array( ndimage.imread( self._file_name ) , dtype=self.dtype )
         
-        return img_rgb
+        img_rgb[:] = img_rgb[:] / np.float32(2**8-1)  
+        
+        return ( img_rgb , 8 )
     
     
 class ReadImageRaw( ReadImageVirtual ):
     def __init__(self):
         ReadImageVirtual.__init__(self)
+
+        global __rawpy
+        
+        if not __rawpy :
+            raise Exception( " %s , RAWPY library not supported: " % sys._getframe().f_code.co_name )
 
         raw_str = """       
             .3fr,
@@ -112,7 +125,20 @@ class ReadImageRaw( ReadImageVirtual ):
         ReadImageVirtual._add_supported_formats(self, raw_lst )
         
     def read(self, file_name=None):
-        pass
+        
+        if file_name != None :
+            self._file_name = file_name 
+        elif self._file_name != None :
+            pass
+        else :
+            raise Exception( " %s , Undefined file name: " % sys._getframe().f_code.co_name )
+
+        with rawpy.imread ( file_name ) as raw:
+            rgb = np.array( raw.postprocess( output_bps=16 ) , dtype=self.dtype )
+        
+        rgb[:] = rgb[:] / np.float32(2**16-1)
+            
+        return ( rgb , 16 ) 
 
     
     
