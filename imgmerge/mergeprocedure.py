@@ -33,6 +33,7 @@ class MergeProcedure( object ):
     def __init__(self):
         self._img_list = None
         self._resimg = None
+        self._refimage = None
 
     def set_images_list(self, img_list):
         self._img_list = img_list 
@@ -41,7 +42,15 @@ class MergeProcedure( object ):
         return self._img_list
     
     images_list = property( get_images_list , set_images_list )
-        
+
+    def set_reference_image(self, file_name ):
+        self._refimage = file_name
+
+    def get_reference_image(self):
+        return self._refimage
+
+    reference_image = property(get_reference_image, set_reference_image )
+
     def execute(self):
         NotImplementedError(" %s : is virutal and must be overridden." % sys._getframe().f_code.co_name )
     
@@ -71,6 +80,10 @@ class NpMergeProcedure( MergeProcedure ):
         if len( self.images_list ) == 0 :
             raise Exception( " %s , Empty List" % sys._getframe().f_code.co_name )
         
+        if self.reference_image:
+            self.images_list = list(filter(( self.reference_image ).__ne__, self.images_list ))
+            self.images_list = [self.reference_image] + self.images_list
+
         while True :
             try :
                 readimg.file_name = self.images_list[0] ;
