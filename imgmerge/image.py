@@ -21,6 +21,7 @@ class Image(object):
         self._dtype = np.float32
         self._image = np.array( [] , dtype=self._dtype )
         self._color_depth = 8 
+        self._color_mode = "RGB"
         
         self._normalized = False 
     
@@ -37,6 +38,26 @@ class Image(object):
     
     shape = property( get_shape )
     
+    def resize(self, size):
+
+        if len(size) == 3 :
+            if size[2] == 3 :
+                self._color_mode = "RGB"
+            elif size[2] == 4 :
+                self._color_mode = "RGBA"
+        elif self._color_mode == "RGB" :
+            isize = size + (3,)
+        elif self._color_mode == "RGBA" :
+            isize = size + (4,)
+
+        np.resize( self._image , isize )
+
+    def to_white(self):
+        self._image[:] = self.dtype( 2**self.color_depth - 1 )
+
+    def to_black(self):
+        self._image[:] = 0.0
+
     def get_color_depth(self):
         return self._color_depth
     
@@ -58,6 +79,9 @@ class Image(object):
         
     image = property(get_image, set_image )
     
+    def add(self,other):
+        self.image[:] = self.image[:] + other.image[:]
+
     def normalize(self):
         if not self._normalized :
             self.image[:] = self.image[:] / (2.0**self.color_depth-1.0)
