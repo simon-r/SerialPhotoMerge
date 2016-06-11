@@ -86,7 +86,7 @@ class ReadImageBasic( ReadImageVirtual ):
         img_rgb = Image( color_depth=8 )
 
         img_rgb.image = np.array( ndimage.imread( self._file_name ) , dtype=img_rgb.dtype )       
-        
+
         return img_rgb 
     
     
@@ -135,12 +135,14 @@ class ReadImageRaw( ReadImageVirtual ):
         else :
             raise Exception( " %s , Undefined file name: " % sys._getframe().f_code.co_name )
 
+        rgb = Image( color_depth=16 )
+
         with rawpy.imread ( file_name ) as raw:
-            rgb = np.array( raw.postprocess( output_bps=16 ) , dtype=self.dtype )
+            rgb = np.array( raw.postprocess( output_bps=16 ) , dtype=rgb.dtype )
         
         #rgb[:] = rgb[:] / np.float32(2**16-1)
             
-        return ( rgb , 16 ) 
+        return rgb 
 
     
     
