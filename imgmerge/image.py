@@ -17,10 +17,10 @@
 import numpy as np
 
 class Image(object):
-    def __init__(self):
+    def __init__(self, color_depth=8):
         self._dtype = np.float32
         self._image = np.array( [] , dtype=self._dtype )
-        self._color_depth = 8 
+        self._color_depth = color_depth 
         self._color_mode = "RGB"
         
         self._normalized = False 
@@ -51,6 +51,17 @@ class Image(object):
             isize = size + (4,)
 
         np.resize( self._image , isize )
+
+    def get_uint_array(self):
+
+        if self.color_depth == 8 :
+            idtype = np.uint8
+        elif self.color_depth == 16 :
+            idtype = np.uint16
+        else :
+            idtype = np.uint8
+
+        return np.array( self.image , dtype=idtype )
 
     def to_white(self):
         self._image[:] = self.dtype( 2**self.color_depth - 1 )

@@ -19,6 +19,7 @@ import sys
 import os
 
 import scipy.ndimage as ndimage
+from imgmerge.image import Image
 
 try:
     import rawpy
@@ -82,9 +83,11 @@ class ReadImageBasic( ReadImageVirtual ):
         else :
             raise Exception( " %s , Undefined file name: " % sys._getframe().f_code.co_name )
         
-        img_rgb = np.array( ndimage.imread( self._file_name ) , dtype=self.dtype )
-                       
-        return ( img_rgb , 8 )
+        img_rgb = Image( color_depth=8 )
+
+        img_rgb.image = np.array( ndimage.imread( self._file_name ) , dtype=img_rgb.dtype )       
+        
+        return img_rgb 
     
     
 class ReadImageRaw( ReadImageVirtual ):
@@ -135,7 +138,7 @@ class ReadImageRaw( ReadImageVirtual ):
         with rawpy.imread ( file_name ) as raw:
             rgb = np.array( raw.postprocess( output_bps=16 ) , dtype=self.dtype )
         
-        rgb[:] = rgb[:] / np.float32(2**16-1)
+        #rgb[:] = rgb[:] / np.float32(2**16-1)
             
         return ( rgb , 16 ) 
 

@@ -41,6 +41,7 @@ class WriteImage( object ):
         else :
             raise Exception( " %s , Undefined file name: " % sys._getframe().f_code.co_name )
         
-        imsave( self.file_name, imagearr )
+        imagearr.un_normalize() 
+        imsave( self.file_name, imagearr.get_uint_array() )
         
     

@@ -19,6 +19,7 @@ import sys
 
 import scipy.ndimage as ndimage
 from imgmerge.readimg import ReadImageBasic
+from imgmerge.image import Image
 
 #import matplotlib.pyplot as plt
 
@@ -65,13 +66,15 @@ class NpMergeProcedure( MergeProcedure ):
         
         color_bit = 8 
         
+        self.resulting_image = None
+
         if len( self.images_list ) == 0 :
             raise Exception( " %s , Empty List" % sys._getframe().f_code.co_name )
         
         while True :
             try :
                 readimg.file_name = self.images_list[0] ;
-                (resimg, color_bit) = readimg.read()
+                resimg = readimg.read()
                 
                 break 
             except :
@@ -92,25 +95,25 @@ class NpMergeProcedure( MergeProcedure ):
             
             readimg.file_name = img
             try :
-                (imgarr, tmp_bit) = readimg.read()
+                imgarr = readimg.read()
                                 
-                if tmp_bit != color_bit :
+                if imgarr.color_depth != resimg.color_depth :
                     raise Exception() 
                 
                 # discard image if the shape is not equivalent!
-                if shape != imgarr.shape :
+                if resimg.shape != imgarr.shape :
                     raise Exception() 
                  
-                resimg[:] = resimg[:] + imgarr[:]
+                resimg.add( imgarr )
                 img_cnt += 1.0 
                 
                 #print( imgarr.shape )
             except :
                 invalid_imgs.append(img)
         
-        resimg[:] = resimg[:] / img_cnt 
+        resimg.image[:] = resimg.image[:] / img_cnt 
         
-        self.resulting_image = np.array( resimg[:] , dtype=get_dtype( color_bit ) )
+        self.resulting_image = resimg
                 
         return invalid_imgs
         
