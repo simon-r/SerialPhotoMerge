@@ -23,9 +23,9 @@ from imgmerge.image import Image
 
 try:
     import rawpy
-    __rawpy = True
+    imported_rawpy = True
 except:
-    __rawpy = False
+    imported_rawpy = False
 
 class ReadImageVirtual( object ):
     def __init__(self):
@@ -50,13 +50,14 @@ class ReadImageVirtual( object ):
     
     def is_supported(self, file_name):
         foo, file_extension = os.path.splitext(file_name)
+
         if file_extension.lower() in self._supported_formats :
             return True
         else :
             return False
             
     def _add_supported_formats(self, fmts):
-        self._supported_formats.append( fmts )
+        self._supported_formats = self._supported_formats + fmts 
     
     dtype = property( get_dtype, set_dtype)
     
@@ -68,11 +69,10 @@ class ReadImageVirtual( object ):
         NotImplementedError(" %s : is virutal and must be overridden." % sys._getframe().f_code.co_name ) 
     
     
-
 class ReadImageBasic( ReadImageVirtual ):
     def __init__(self):
         ReadImageVirtual.__init__(self)
-        ReadImageVirtual._add_supported_formats(self, [ ".jpg" , ".jpeg" , ".png" , ".tiff" ] ) 
+        ReadImageVirtual._add_supported_formats(self, [ '.jpg' , '.jpeg' , '.png' , '.tiff' ] ) 
                   
     def read(self, file_name=None):
         
@@ -92,11 +92,9 @@ class ReadImageBasic( ReadImageVirtual ):
     
 class ReadImageRaw( ReadImageVirtual ):
     def __init__(self):
-        ReadImageVirtual.__init__(self)
-
-        global __rawpy
         
-        if not __rawpy :
+        ReadImageVirtual.__init__(self)
+        if not imported_rawpy :
             raise Exception( " %s , RAWPY library not supported: " % sys._getframe().f_code.co_name )
 
         raw_str = """       
@@ -139,8 +137,6 @@ class ReadImageRaw( ReadImageVirtual ):
 
         with rawpy.imread ( file_name ) as raw:
             rgb = np.array( raw.postprocess( output_bps=16 ) , dtype=rgb.dtype )
-        
-        #rgb[:] = rgb[:] / np.float32(2**16-1)
             
         return rgb 
 

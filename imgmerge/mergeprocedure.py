@@ -20,6 +20,7 @@ import sys
 import scipy.ndimage as ndimage
 from imgmerge.readimg import ReadImageBasic
 from imgmerge.image import Image
+from imgmerge.readimgfactory import ReadImageFarctory
 
 #import matplotlib.pyplot as plt
 
@@ -34,6 +35,7 @@ class MergeProcedure( object ):
         self._img_list = None
         self._resimg = None
         self._refimage = None
+        self._read_img_factory = ReadImageFarctory()
 
     def set_images_list(self, img_list):
         self._img_list = img_list 
@@ -50,6 +52,14 @@ class MergeProcedure( object ):
         return self._refimage
 
     reference_image = property(get_reference_image, set_reference_image )
+
+    def get_read_image_factory(self):
+        return self._read_img_factory
+
+    def set_read_image_factory(self, rif):
+        self._read_img_factory = rif
+
+    read_image_factory = property(get_read_image_factory, set_read_image_factory)
 
     def execute(self):
         NotImplementedError(" %s : is virutal and must be overridden." % sys._getframe().f_code.co_name )
@@ -71,9 +81,7 @@ class NpMergeProcedure( MergeProcedure ):
     
     def execute(self):
         
-        readimg = ReadImageBasic()
-        
-        color_bit = 8 
+        readimg = None
         
         self.resulting_image = None
 
@@ -86,7 +94,8 @@ class NpMergeProcedure( MergeProcedure ):
 
         while True :
             try :
-                readimg.file_name = self.images_list[0] ;
+                readimg = self.read_image_factory.get_readimage( self.images_list[0] )
+
                 resimg = readimg.read()
                 
                 break 
@@ -106,8 +115,8 @@ class NpMergeProcedure( MergeProcedure ):
                 f_first = False 
                 continue 
             
-            readimg.file_name = img
             try :
+                readimg = self.read_image_factory.get_readimage( img )
                 imgarr = readimg.read()
                                 
                 if imgarr.color_depth != resimg.color_depth :

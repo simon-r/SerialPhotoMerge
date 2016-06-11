@@ -40,12 +40,15 @@ class ReadImageFarctory( object ):
 
     def get_readimage(self, file_name=None):
         if not file_name or self.force_default:
+            self._default_reader.file_name = file_name
             return self._default_reader
 
         for reader in self._img_reads :
             if reader.is_supported( file_name ):
+                reader.file_name = file_name
                 return reader
 
+        raise Exception("%s : Image file format not supported." % sys._getframe().f_code.co_name )
         return None
 
     
