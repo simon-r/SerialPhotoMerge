@@ -16,6 +16,28 @@
 
 import numpy as np
 
+def estimate_color_depth( image_array ):
+    if image_array.dtype == np.dtype('uint8') :
+        return 8
+    elif image_array.dtype == np.dtype('uint16') :
+        return 16
+    elif image_array.dtype == np.dtype('uint32') :
+        return 32
+    
+    mx = np.max( image_array )
+    mn = np.min( image_array )
+
+    if mn < 0.0 :
+        raise Exception( "%s : Invalid image_array, negatives values not allowed" % sys._getframe().f_code.co_name )
+
+    if mx < 2**8 :
+        return 8
+    elif mx < 2**16 :
+        return 16
+    elif mx < 2**32 :
+        return 32
+
+
 class Image(object):
     def __init__(self, color_depth=8):
         self._dtype = np.float32
@@ -77,13 +99,29 @@ class Image(object):
         
     color_depth = property( get_color_depth, set_color_depth )
     
-    def set_image(self, image_array ):
+    def set_image_extended(self, image_array, color_depth=None, idtype=np.float32 ):
+        if not color_depth:
+            self.color_depth = estimate_color_depth( image_array )
+        else:
+            self.color_depth = color_depth
+
+        self.dtype = idtype
         self._image = np.array( image_array , dtype=self.dtype )
+
+    def set_image(self, image_array ):
         
+        self.dtype = np.float32
+
         if image_array.dtype == np.dtype('uint8') :
-            self._color_depth = 8
+            self.color_depth = 8
         elif image_array.dtype == np.dtype('uint16') :
-            self._color_depth = 16
+            self.color_depth = 16
+        elif image_array.dtype == np.dtype('uint32') :
+            self.color_depth = 32
+        else:
+            self.color_depth = estimate_color_depth( image_array )
+
+        self._image = np.array( image_array , dtype=self.dtype )
 
     def get_image(self):
         return self._image

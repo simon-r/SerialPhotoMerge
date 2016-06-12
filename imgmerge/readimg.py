@@ -136,7 +136,7 @@ class ReadImageRaw( ReadImageVirtual ):
         rgb = Image( color_depth=16 )
 
         with rawpy.imread ( file_name ) as raw:
-            rgb = np.array( raw.postprocess( output_bps=16 ) , dtype=rgb.dtype )
+            rgb.image = np.array( raw.postprocess( output_bps=16 ) , dtype=rgb.dtype )
             
         return rgb 
 
