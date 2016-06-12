@@ -95,9 +95,7 @@ class NpMergeProcedure( MergeProcedure ):
         while True :
             try :
                 readimg = self.read_image_factory.get_readimage( self.images_list[0] )
-
                 resimg = readimg.read()
-                
                 break 
             except :
                 self.images_list.pop(0)
@@ -150,9 +148,13 @@ class MergeRemoveUnwanted( MergeProcedure ):
         if len( self.images_list ) == 0 :
             raise Exception( " %s , Empty List" % sys._getframe().f_code.co_name )
     
+        if self.reference_image:
+            self.images_list = list(filter(( self.reference_image ).__ne__, self.images_list ))
+            self.images_list = [self.reference_image] + self.images_list
+
         while True :
             try :
-                readimg.file_name = self.images_list[0] ;
+                readimg = self.read_image_factory( self.images_list[0] )
                 resimg = readimg.read()
                 break 
             except :
@@ -160,8 +162,8 @@ class MergeRemoveUnwanted( MergeProcedure ):
     
         shape = resimg.shape
     
-        resimg[:] = 128.0 
-        avrimg = np.zeros( shape , dtype=readimg.dtype )
+        resimg.image[:] = 128.0 
+        avrimg = Image( ishape=shape , dtype=readimg.dtype )
         std = np.zeros( shape[:2] , dtype=readimg.dtype ) + 256.0
         
         dist = np.zeros( shape[:2] , dtype=readimg.dtype ) 
@@ -173,11 +175,9 @@ class MergeRemoveUnwanted( MergeProcedure ):
             invalid_imgs = []
             img_cnt = 0.0
         
-            for img in self.images_list :
-                
-                readimg.file_name = img
-                
+            for img in self.images_list :    
                 try :
+                    readimg = self.read_image_factory( img )
                     imgarr = readimg.read()
                     
                     if shape != imgarr.shape :
@@ -187,22 +187,22 @@ class MergeRemoveUnwanted( MergeProcedure ):
                     img_cnt += 1.0
                     
                     dist[:] = np.sqrt( 
-                                np.power( resimg[:,:,0] - imgarr[:,:,0] , 2 ) + 
-                                np.power( resimg[:,:,1] - imgarr[:,:,1] , 2 ) + 
-                                np.power( resimg[:,:,2] - imgarr[:,:,2] , 2 ) )
+                                np.power( resimg.image[:,:,0] - imgarr.image[:,:,0] , 2 ) + 
+                                np.power( resimg.image[:,:,1] - imgarr.image[:,:,1] , 2 ) + 
+                                np.power( resimg.image[:,:,2] - imgarr.image[:,:,2] , 2 ) )
                     
                     flags[:] = False
                     flags[:] = dist[:] < std[:] / np.exp( np.float( itr ) / 10.0 )
                     
-                    avrimg[flags] = avrimg[flags] + imgarr[flags]
+                    avrimg.image[flags] = avrimg.image[flags] + imgarr.image[flags]
                     
                     flags[:] = np.logical_not( flags ) 
-                    avrimg[flags] = avrimg[flags] + resimg[flags]
+                    avrimg.image[flags] = avrimg.image[flags] + resimg.image[flags]
                     
                 except :
                     invalid_imgs.append(img) 
                 
-            resimg[:] = avrimg[:] / img_cnt
+            resimg.image[:] = avrimg.image[:] / img_cnt
             
             std[:] = 0.0 
             
@@ -211,16 +211,16 @@ class MergeRemoveUnwanted( MergeProcedure ):
             
             for img in self.images_list :
                 
-                readimg.file_name = img
+                readimg = self.read_image_factory( img )
                 imgarr = readimg.read()
                 
                 std[:] = ( std[:] +
-                           ( np.power( resimg[:,:,0] - imgarr[:,:,0] , 2 ) + 
-                             np.power( resimg[:,:,1] - imgarr[:,:,1] , 2 ) + 
-                             np.power( resimg[:,:,2] - imgarr[:,:,2] , 2 ) ) )   
+                           ( np.power( resimg.image[:,:,0] - imgarr.image[:,:,0] , 2 ) + 
+                             np.power( resimg.image[:,:,1] - imgarr.image[:,:,1] , 2 ) + 
+                             np.power( resimg.image[:,:,2] - imgarr.image[:,:,2] , 2 ) ) )   
                 
             std[:] = np.sqrt( std[:] / img_cnt )
-            avrimg[:] = 0.0 
+            avrimg.image[:] = 0.0 
         
         self.resulting_image = np.array( resimg[:] , dtype=np.uint8 )
             

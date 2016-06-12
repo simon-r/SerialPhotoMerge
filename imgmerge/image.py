@@ -39,11 +39,28 @@ def estimate_color_depth( image_array ):
 
 
 class Image(object):
-    def __init__(self, color_depth=8):
-        self._dtype = np.float32
-        self._image = np.array( [] , dtype=self._dtype )
+    def __init__(self, color_depth=8, ishape=(0,0), color_mode="RGB", dtype= np.float32 ):
+        self._dtype = dtype
         self._color_depth = color_depth 
         self._color_mode = "RGB"
+
+        if len( ishape ) == 2:
+            if color_mode == "RGB":
+                ishape = ishape + (3,)
+            elif color_mode == "RGBA":
+                ishape = ishape + (4,)
+            elif color_mode == "MONO":
+                ishape = ishape
+        elif len( ishape ) == 3:
+            if ishape[2] not in [3,4]:
+                raise Exception()
+            elif ishape[2]==3:
+                self._color_mode = "RGB"
+            else:
+                self._color_mode = "RGBA"
+
+        
+        self._image = np.zeros( ishape , dtype=self._dtype )
         
         self._normalized = False 
     
