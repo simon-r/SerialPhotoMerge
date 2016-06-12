@@ -41,7 +41,8 @@ def main():
         print(fn)
         mrg.add_image( dn , fn)
     
-    mrg.set_merge_procedure( NpMergeProcedure() )
+    #mrg.set_merge_procedure( NpMergeProcedure() )
+    mrg.set_merge_procedure( MergeRemoveUnwanted() )
     mrg.execute_merge()
     
     mrg.save_resulting_image( res_file )

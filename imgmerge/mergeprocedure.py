@@ -77,7 +77,7 @@ class MergeProcedure( object ):
 class NpMergeProcedure( MergeProcedure ):
     def __init__(self):
         super().__init__()
-        self._resimg = None
+        #self._resimg = None
     
     def execute(self):
         
@@ -140,10 +140,10 @@ class NpMergeProcedure( MergeProcedure ):
         
 class MergeRemoveUnwanted( MergeProcedure ):
     def __init__(self):
-        pass
+        super().__init__()
     
     def execute(self):
-        readimg = ReadImageBasic()
+        readimg = None
         
         if len( self.images_list ) == 0 :
             raise Exception( " %s , Empty List" % sys._getframe().f_code.co_name )
@@ -154,7 +154,7 @@ class MergeRemoveUnwanted( MergeProcedure ):
 
         while True :
             try :
-                readimg = self.read_image_factory( self.images_list[0] )
+                readimg = self.read_image_factory.get_readimage( self.images_list[0] )
                 resimg = readimg.read()
                 break 
             except :
@@ -175,9 +175,9 @@ class MergeRemoveUnwanted( MergeProcedure ):
             invalid_imgs = []
             img_cnt = 0.0
         
-            for img in self.images_list :    
+            for img in self.images_list :
                 try :
-                    readimg = self.read_image_factory( img )
+                    readimg = self.read_image_factory.get_readimage( img )
                     imgarr = readimg.read()
                     
                     if shape != imgarr.shape :
@@ -211,7 +211,7 @@ class MergeRemoveUnwanted( MergeProcedure ):
             
             for img in self.images_list :
                 
-                readimg = self.read_image_factory( img )
+                readimg = self.read_image_factory.get_readimage( img )
                 imgarr = readimg.read()
                 
                 std[:] = ( std[:] +
@@ -222,7 +222,7 @@ class MergeRemoveUnwanted( MergeProcedure ):
             std[:] = np.sqrt( std[:] / img_cnt )
             avrimg.image[:] = 0.0 
         
-        self.resulting_image = np.array( resimg[:] , dtype=np.uint8 )
+        self.resulting_image = resimg
             
         
         
