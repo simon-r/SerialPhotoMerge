@@ -20,19 +20,29 @@ import sys
 
 from imgmerge.imagemerge import ImageMerge
 from imgmerge.mergeprocedure import NpMergeProcedure, MergeRemoveUnwanted
+from imgmerge.args_parse import args_parse
 
 def main():
     
-    if len( sys.argv ) == 2 :
-        dn = sys.argv[1]
-        res_file = "res.jpg"
-    elif len( sys.argv ) == 3 :
-        dn = sys.argv[1]
-        res_file = sys.argv[2]
-    else :
-        print( "bye" )
-        return 1 
+    options = args_parse()
+
+    if options.dir_in:
+        dn = options.dir_in
+    else:
+        raise Exception()
+
+    if options.out_image:
+        out_image = options.out_image
+    else:
+        out_image="/tmp/out_merge.jpg"
     
+    merge_procedure = None
+    if options.algorithm in ["avg", "average"]:
+        merge_procedure = NpMergeProcedure()
+    elif options.algorithm in ["ru", "remove_unwanted"]:
+        merge_procedure = MergeRemoveUnwanted()
+
+
     dr = os.listdir(dn)
     
     mrg = ImageMerge()
@@ -41,11 +51,10 @@ def main():
         print(fn)
         mrg.add_image( dn , fn)
     
-    #mrg.set_merge_procedure( NpMergeProcedure() )
-    mrg.set_merge_procedure( MergeRemoveUnwanted() )
+    mrg.set_merge_procedure( merge_procedure )
     mrg.execute_merge()
     
-    mrg.save_resulting_image( res_file )
+    mrg.save_resulting_image( out_image )
     
     
 if __name__ == '__main__':
