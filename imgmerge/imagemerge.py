@@ -16,7 +16,7 @@
 
 import os
 
-from imgmerge.writeimg import WriteImage
+from imgmerge.writeimg import WriteImageBasic
 
 
 class ImageMerge( object ):
@@ -39,7 +39,7 @@ class ImageMerge( object ):
         return self._merger.get_resulting_image()
     
     def save_resulting_image(self, file_name, fmt=None ):
-        imgw = WriteImage()
+        imgw = WriteImageBasic()
         imgw.file_name = file_name 
         imgw.write( self._merger.get_resulting_image() )
         

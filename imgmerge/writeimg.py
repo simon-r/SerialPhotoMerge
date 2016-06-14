@@ -19,8 +19,13 @@ import sys
 
 from matplotlib.image import imsave
 
+try:
+    import imageio
+    imported_imageio = True
+except:
+    imported_imageio = False
 
-class WriteImage( object ):
+class WriteImageVirtual( object ):
     def __init__(self):
         self._file_name = None
         
@@ -33,15 +38,41 @@ class WriteImage( object ):
     file_name = property(get_file_name, set_file_name )
     
     def write(self, imagearr,  file_name=None):
+        NotImplementedError(" %s : is virutal and must be overridden." % sys._getframe().f_code.co_name )
+
+class WriteImageBasic( WriteImageVirtual ):
+    def __init__(self):
+        super().__init__()
+        
+    def write(self, imagearr,  file_name=None):
         
         if file_name != None :
-            self._file_name = file_name 
-        elif self._file_name != None :
+            self.file_name = file_name 
+        elif self.file_name != None :
             pass
         else :
             raise Exception( " %s , Undefined file name: " % sys._getframe().f_code.co_name )
         
         imagearr.un_normalize() 
         imsave( self.file_name, imagearr.get_uint_array() )
+
+
+class WriteImageExtended( WriteImageVirtual ):
+    def __init__(self):
+        super().__init__()
+        if not imported_imageio :
+            raise Exception( " %s , imageio library is not installed: " % sys._getframe().f_code.co_name )
+
+    def write(self, imagearr,  file_name=None):
+        if file_name != None :
+            self.file_name = file_name 
+        elif self.file_name != None :
+            pass
+        else :
+            raise Exception( " %s , Undefined file name: " % sys._getframe().f_code.co_name )
+        
+        imagearr.un_normalize()
+
+        imageio.imwrite( file_name, imagearr.image )
         
     
