@@ -54,7 +54,7 @@ class WriteImageBasic( WriteImageVirtual ):
             raise Exception( " %s , Undefined file name: " % sys._getframe().f_code.co_name )
         
         imagearr.un_normalize() 
-        imsave( self.file_name, imagearr.get_uint_array() )
+        imsave( self.file_name, imagearr.get_uint_array( tdepth=8 ) )
 
 
 class WriteImageExtended( WriteImageVirtual ):

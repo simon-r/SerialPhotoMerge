@@ -77,15 +77,15 @@ class ReadImageBasic( ReadImageVirtual ):
     def read(self, file_name=None):
         
         if file_name != None :
-            self._file_name = file_name 
-        elif self._file_name != None :
+            self.file_name = file_name 
+        elif self.file_name != None :
             pass
         else :
             raise Exception( " %s , Undefined file name: " % sys._getframe().f_code.co_name )
         
         img_rgb = Image( color_depth=8 )
 
-        img_rgb.image = np.array( ndimage.imread( self._file_name ) , dtype=img_rgb.dtype )       
+        img_rgb.image = np.array( ndimage.imread( self.file_name ) , dtype=img_rgb.dtype )       
 
         return img_rgb 
     
@@ -95,7 +95,7 @@ class ReadImageRaw( ReadImageVirtual ):
         
         ReadImageVirtual.__init__(self)
         if not imported_rawpy :
-            raise Exception( " %s , RAWPY library not supported: " % sys._getframe().f_code.co_name )
+            raise Exception( " %s , RAWPY library is not installed: " % sys._getframe().f_code.co_name )
 
         raw_str = """       
             .3fr,
@@ -127,15 +127,15 @@ class ReadImageRaw( ReadImageVirtual ):
     def read(self, file_name=None):
         
         if file_name != None :
-            self._file_name = file_name 
-        elif self._file_name != None :
+            self.file_name = file_name 
+        elif self.file_name != None :
             pass
         else :
             raise Exception( " %s , Undefined file name: " % sys._getframe().f_code.co_name )
 
         rgb = Image( color_depth=16 )
 
-        with rawpy.imread ( file_name ) as raw:
+        with rawpy.imread ( self.file_name ) as raw:
             rgb.image = np.array( raw.postprocess( output_bps=16 ) , dtype=rgb.dtype )
             
         return rgb 

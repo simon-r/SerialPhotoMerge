@@ -91,7 +91,7 @@ class Image(object):
 
         np.resize( self._image , isize )
 
-    def get_uint_array(self):
+    def get_uint_array(self, tdepth=None ):
 
         if self.color_depth == 8 :
             idtype = np.uint8
@@ -100,7 +100,17 @@ class Image(object):
         else :
             idtype = np.uint8
 
-        return np.array( self.image , dtype=idtype )
+        if tdepth == 8 :
+            idtype = np.uint8
+        elif tdepth == 16 :
+            idtype = np.uint16
+        else:
+            raise Exception("%s: Invalid color depth" % sys._getframe().f_code.co_name )
+
+        if tdepth == None or tdepth == self.color_depth:
+            return np.array( self.image , dtype=idtype )
+        else:
+            return np.array( self.image[:]*( ( 2**tdepth / 2**self.color_depth ) ) , dtype=idtype )
 
     def to_white(self):
         self._image[:] = self.dtype( 2**self.color_depth - 1 )
@@ -158,7 +168,18 @@ class Image(object):
         if self._normalized :
             self.image[:] = self.image[:] * (2.0**self.color_depth-1.0)
             
-        self._normalized = False 
+        self._normalized = False
+
+    def to_depth(self, tdepth):
+        if tdepth not in [8, 16, 32] :
+            raise Exception() 
+
+        if self.color_depth == tdepth:
+            return True
+
+        self.image[:] = self.image[:] * ( 2**tdepth / 2**self.color_depth )
+        self.color_depth = tdepth
+        
     
     
     
