@@ -162,14 +162,14 @@ class MergeRemoveUnwanted( MergeProcedure ):
     
         shape = resimg.shape
     
-        resimg.image[:] = 128.0 
+        resimg.image[:] = 2**resimg.color_depth / 2 
         avrimg = Image( ishape=shape , dtype=readimg.dtype )
-        std = np.zeros( shape[:2] , dtype=readimg.dtype ) + 256.0
+        std = np.zeros( shape[:2] , dtype=readimg.dtype ) + 2**resimg.color_depth
         
         dist = np.zeros( shape[:2] , dtype=readimg.dtype ) 
         flags = np.zeros( shape[:2] , dtype=np.bool8 )
     
-        iter_cnt = 10 
+        iter_cnt = 5 
     
         for itr in range( iter_cnt ) :
             invalid_imgs = []

@@ -28,6 +28,8 @@ except:
 class WriteImageVirtual( object ):
     def __init__(self):
         self._file_name = None
+        self.__allowed_color_depths__()
+        self.out_color_depth = 8
         
     def set_file_name(self, file_name):
         self._file_name = file_name 
@@ -37,12 +39,28 @@ class WriteImageVirtual( object ):
     
     file_name = property(get_file_name, set_file_name )
     
+    def get_out_color_depth(self):
+        return self._out_color_depth
+
+    def set_out_color_depth(self, cd):
+        if cd in self._allowed_cd:
+            self._out_color_depth = cd
+        else:
+            self._out_color_depth = 8
+
+    out_color_depth = property(get_out_color_depth, set_out_color_depth)
+
+    def __allowed_color_depths__(self, lcd=[8,16]):
+        self._allowed_cd = lcd
+
     def write(self, imagearr,  file_name=None):
         NotImplementedError(" %s : is virutal and must be overridden." % sys._getframe().f_code.co_name )
+
 
 class WriteImageBasic( WriteImageVirtual ):
     def __init__(self):
         super().__init__()
+        self.__allowed_color_depths__( [8] )
         
     def write(self, imagearr,  file_name=None):
         
@@ -62,7 +80,7 @@ class WriteImageExtended( WriteImageVirtual ):
         super().__init__()
         if not imported_imageio :
             raise Exception( " %s , imageio library is not installed: " % sys._getframe().f_code.co_name )
-
+        
     def write(self, imagearr,  file_name=None):
         if file_name != None :
             self.file_name = file_name 
@@ -72,7 +90,5 @@ class WriteImageExtended( WriteImageVirtual ):
             raise Exception( " %s , Undefined file name: " % sys._getframe().f_code.co_name )
         
         imagearr.un_normalize()
-
-        imageio.imwrite( file_name, imagearr.image )
+        imageio.imwrite( file_name, imagearr.get_uint_array( tdepth=self.out_color_depth ) )
         
-    
