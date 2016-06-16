@@ -22,7 +22,7 @@ After this you should use ImageMerge for combining the images and obtaining the 
 4. Better capacity in controlling the situations with a difficult light. 
 
 <h3>Advantages of ImageMerge respect to others software [like photoshop or imagemagik]</h3>
-Photoshop and Imagemagik load in to memory all the images before computing the average, so the maximal number of images is limited by your installed RAM.
+Photoshop and Imagemagik load into memory all the images before computing the average, so the maximal number of images is limited by your installed RAM.
 With ImageMerge you can virtually process an unlimited number of images.  
 
 <h3>Example</h3>
