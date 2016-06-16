@@ -64,7 +64,7 @@ imageio: https://github.com/imageio/imageio (optional)<br>
 usage: image_merge [-h] [-d DIR_IN] [-o OUT_IMAGE] [-ocd {8,16,auto}]
                    [-a {avg,average,re,remove_extraneous}]
 
-optional arguments:
+<h3>Optional arguments:</h3>
   -h, --help            
   show this help message and exit
   
