@@ -82,5 +82,6 @@ optional arguments:
   avg|average: compute the average.
   re|remove_extraneous: remove extraneous elements
 
-<h2>Example</h2>
+<h2>Image Example</h2>
+The following image has been produced by combining more than 100 images and about 350 seconds of total exposure.
 <img src="http://i.imgur.com/Sr59TfL.jpg" >
