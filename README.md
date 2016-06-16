@@ -51,6 +51,13 @@ if the imput images are in RAW the resulting r.tif will be written in 16bit.
 > ./image_merge -d /myimagecollection/serial/ -o /tmp/r.jpg -a re
 </pre>
 
+<h3>Requirements</h3>
+Python 3
+numpy: http://www.numpy.org/
+scipy: https://www.scipy.org/
+matplotlib: http://matplotlib.org/
+rawpy: https://github.com/neothemachine/rawpy (optional)
+imageio: https://github.com/imageio/imageio (optional)
 
 <h3> optional arguments </h3>
 
