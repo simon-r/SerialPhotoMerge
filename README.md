@@ -9,6 +9,8 @@ ImageMerge (ideally) do not load in memory all the images so it can work with a 
 <ul>
     <li>Average of an unlimited number of images</li>
     <li>Remove extraneous elements given a collection of images</li>
+    <li>RAW support</li>
+    <li>Supprt for 16bit color depth (otput 16bit tiff)</li>
 </ul>
 
 <h3>How to</h3>
