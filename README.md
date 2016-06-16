@@ -68,7 +68,7 @@ optional arguments:<br>
   -h, --help           <br> 
   show this help message and exit<br>
   <br>
-  -d DIR_IN, --dir_in DIR_IN   <br>
+  -d DIR_IN, --dir_in DIR_IN <br>
   set the input directory<br>
   <br>
   -o OUT_IMAGE, --out_image OUT_IMAGE<br>  
