@@ -30,6 +30,7 @@ class WriteImageVirtual( object ):
         self._file_name = None
         self.__allowed_color_depths__()
         self.out_color_depth = 8
+        self._fmt_args = {}
         
     def set_file_name(self, file_name):
         self._file_name = file_name 
@@ -49,6 +50,14 @@ class WriteImageVirtual( object ):
             self._out_color_depth = 8
 
     out_color_depth = property(get_out_color_depth, set_out_color_depth)
+
+    def set_image_fmt_arguments(self, fmt_args):
+        self._fmt_args = fmt_args
+
+    def get_image_fmt_arguments(self):
+        return self._fmt_args
+
+    image_fmt_arguments = property(get_image_fmt_arguments, set_image_fmt_arguments )
 
     def __allowed_color_depths__(self, lcd=[8,16]):
         self._allowed_cd = lcd
@@ -90,5 +99,6 @@ class WriteImageExtended( WriteImageVirtual ):
             raise Exception( " %s , Undefined file name: " % sys._getframe().f_code.co_name )
         
         imagearr.un_normalize()
-        imageio.imwrite( file_name, imagearr.get_uint_array( tdepth=self.out_color_depth ) )
+        
+        imageio.imwrite( file_name, imagearr.get_uint_array( tdepth=self.out_color_depth ), self.image_fmt_arguments )
         

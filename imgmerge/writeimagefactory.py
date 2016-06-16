@@ -32,10 +32,23 @@ class WriteImageFactory( object ):
             self._chosen_wi = WriteImageBasic()
             return 
         elif format in [ "png" ]:
-            pass
+            if color_depth == 8 and len( kwargs ) == 0:
+                self._chosen_wi = WriteImageBasic()
+            elif color_depth in [8] or len(kwargs) > 0:
+                self._chosen_wi = WriteImageExtended()
         elif format in [ "tif", "tiff" ]:
-            pass
-    
+            if color_depth == 8 and len( kwargs ) == 0:
+                self._chosen_wi = WriteImageBasic()
+            elif color_depth in [8, 16] or len(kwargs) > 0:
+                self._chosen_wi = WriteImageExtended()
+
+        if len(kwargs) > 0 :
+            self._chosen_wi.image_fmt_arguments = kwargs
+
+        self._chosen_wi.out_color_depth = color_depth
+        
     def get_write_image(self):
         if self._default_wi :
             return self._default_wi
+        else:
+            return self._chosen_wi
