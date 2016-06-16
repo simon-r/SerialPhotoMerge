@@ -82,3 +82,5 @@ optional arguments:
   avg|average: compute the average.
   re|remove_extraneous: remove extraneous elements
 
+<h2>Example</h2>
+<img src="http://i.imgur.com/Sr59TfL.jpg" >
