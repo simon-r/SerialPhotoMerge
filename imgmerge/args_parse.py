@@ -17,33 +17,36 @@
 import argparse
 
 def args_parse():
-    desc = "" 
-    desc =  desc + ""
+    desc = """ 
+    ImageMerge is a python3 tool for computing the average of an unlimited number of images. ImageMerge (ideally) do not load in memory all the images so it can work with a very big numbers of images. It is useful for creating a daylight very long exposure photography.
+    """
 
     parser = argparse.ArgumentParser( description=desc  )
 
     parser.add_argument("-d", "--dir_in",
         action="store",
         dest="dir_in",
-        help="")
+        help="The directory that stores the input images")
 
     parser.add_argument("-o", "--out_image",
         action="store",
         dest="out_image",
-        help="")  
+        help="The output image")  
 
     parser.add_argument("-ocd", "--out_color_depth",
         action="store",
         choices=["8", "16", "auto"],
         default="auto",
         dest="out_color_depth",
-        help="")  
+        help="Color depth of the output image. At the moment 16bit is supported only by tif")  
 
     parser.add_argument("-a", "--algorithm",
         action="store",
         choices=["avg", "average", "re", "remove_extraneous"],
         default="avg",
         dest="algorithm",
-        help="")
+        help="Algorithm applied on the images: "
+        "avg|average: Average of the images "
+        "re|remove_extraneous: remove extraneous elements")
 
     return parser.parse_args()       
