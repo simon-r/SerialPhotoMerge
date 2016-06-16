@@ -60,28 +60,28 @@ rawpy: https://github.com/neothemachine/rawpy (optional)<br>
 imageio: https://github.com/imageio/imageio (optional)<br>
 
 <h3>Optional arguments </h3>
-
-usage: image_merge [-h] [-d DIR_IN] [-o OUT_IMAGE] [-ocd {8,16,auto}]
-                   [-a {avg,average,re,remove_extraneous}]
-
-optional arguments:
-  -h, --help            
-  show this help message and exit
-  
-  -d DIR_IN, --dir_in DIR_IN   
-  set the input directory
-  
-  -o OUT_IMAGE, --out_image OUT_IMAGE  
-  set the output file (default: /tmp/out_merge.jpg )
-  
-  -ocd {8,16,auto}, --out_color_depth {8,16,auto}  
-  set the output colordepth [dafault: auto]
-  
-  -a {avg,average,re,remove_extraneous}, --algorithm {avg,average,re,remove_extraneous}  
-  select the algorithm: 
-  avg|average: compute the average.
-  re|remove_extraneous: remove extraneous elements
-
+<br>
+usage: image_merge [-h] [-d DIR_IN] [-o OUT_IMAGE] [-ocd {8,16,auto}]<br>
+                   [-a {avg,average,re,remove_extraneous}]<br>
+<br>
+optional arguments:<br>
+  -h, --help           <br> 
+  show this help message and exit<br>
+  <br>
+  -d DIR_IN, --dir_in DIR_IN   <br>
+  set the input directory<br>
+  <br>
+  -o OUT_IMAGE, --out_image OUT_IMAGE<br>  
+  set the output file (default: /tmp/out_merge.jpg )<br>
+  <br>
+  -ocd {8,16,auto}, --out_color_depth {8,16,auto}  <br>
+  set the output colordepth [dafault: auto]<br>
+  <br>
+  -a {avg,average,re,remove_extraneous}, --algorithm {avg,average,re,remove_extraneous}<br>  
+  select the algorithm: <br>
+  avg|average: compute the average.<br>
+  re|remove_extraneous: remove extraneous elements<br>
+<br>
 <h2>Image Example</h2>
 The following image has been produced by combining more than 100 images and about 350 seconds of total exposure.
 <img src="http://i.imgur.com/Sr59TfL.jpg" >
