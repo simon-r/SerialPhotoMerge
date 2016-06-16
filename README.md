@@ -59,12 +59,12 @@ matplotlib: http://matplotlib.org/<br>
 rawpy: https://github.com/neothemachine/rawpy (optional)<br>
 imageio: https://github.com/imageio/imageio (optional)<br>
 
-<h3> optional arguments </h3>
+<h3>Optional arguments </h3>
 
 usage: image_merge [-h] [-d DIR_IN] [-o OUT_IMAGE] [-ocd {8,16,auto}]
                    [-a {avg,average,re,remove_extraneous}]
 
-<h3>Optional arguments:</h3>
+optional arguments:
   -h, --help            
   show this help message and exit
   
