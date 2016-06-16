@@ -19,7 +19,8 @@ import os
 import sys
 
 from imgmerge.imagemerge import ImageMerge
-from imgmerge.mergeprocedure import NpMergeProcedure, MergeRemoveUnwanted
+from imgmerge.mergeremoveextraneous import MergeRemoveExtraneous
+from imgmerge.mergeaverageimage import MergeAverageImage
 from imgmerge.args_parse import args_parse
 from imgmerge.writeimagefactory import WriteImageFactory, get_16bit_support
 
@@ -39,9 +40,9 @@ def main():
     
     merge_procedure = None
     if options.algorithm in ["avg", "average"]:
-        merge_procedure = NpMergeProcedure()
+        merge_procedure = MergeAverageImage()
     elif options.algorithm in ["re", "remove_extraneous"]:
-        merge_procedure = MergeRemoveUnwanted()
+        merge_procedure = MergeRemoveExtraneous()
 
     dr = os.listdir(dn)
     
