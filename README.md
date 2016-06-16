@@ -43,7 +43,7 @@ if the imput images are in RAW the resulting r.tif will be written in 16bit.
 
 2. Force the output tif to 16bit:
 <pre>
-> ./image_merge -d /myimagecollection/serial/ -o /tmp/r.tif -ocd auto
+> ./image_merge -d /myimagecollection/serial/ -o /tmp/r.tif -ocd 16
 </pre>
 
 2. Remove extraneous elements (slow at the moment; max 3 or 4 images)
