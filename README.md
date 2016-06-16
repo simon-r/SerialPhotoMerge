@@ -52,12 +52,12 @@ if the imput images are in RAW the resulting r.tif will be written in 16bit.
 </pre>
 
 <h3>Requirements</h3>
-Python 3
-numpy: http://www.numpy.org/
-scipy: https://www.scipy.org/
-matplotlib: http://matplotlib.org/
-rawpy: https://github.com/neothemachine/rawpy (optional)
-imageio: https://github.com/imageio/imageio (optional)
+Python 3 <br>
+numpy: http://www.numpy.org/<br>
+scipy: https://www.scipy.org/<br>
+matplotlib: http://matplotlib.org/<br>
+rawpy: https://github.com/neothemachine/rawpy (optional)<br>
+imageio: https://github.com/imageio/imageio (optional)<br>
 
 <h3> optional arguments </h3>
 
