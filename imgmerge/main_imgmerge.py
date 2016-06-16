@@ -21,6 +21,8 @@ import sys
 from imgmerge.imagemerge import ImageMerge
 from imgmerge.mergeprocedure import NpMergeProcedure, MergeRemoveUnwanted
 from imgmerge.args_parse import args_parse
+from imgmerge.writeimagefactory import WriteImageFactory, get_16bit_support
+
 
 def main():
     
@@ -31,17 +33,15 @@ def main():
     else:
         raise Exception()
 
-    if options.out_image:
-        out_image = options.out_image
-    else:
-        out_image="/tmp/out_merge.jpg"
+    wif = WriteImageFactory()
+
+
     
     merge_procedure = None
     if options.algorithm in ["avg", "average"]:
         merge_procedure = NpMergeProcedure()
-    elif options.algorithm in ["ru", "remove_unwanted"]:
+    elif options.algorithm in ["re", "remove_extraneous"]:
         merge_procedure = MergeRemoveUnwanted()
-
 
     dr = os.listdir(dn)
     
@@ -53,8 +53,26 @@ def main():
     
     mrg.set_merge_procedure( merge_procedure )
     mrg.execute_merge()
-    
-    mrg.save_resulting_image( out_image )
+
+
+    if options.out_image:
+        out_image = options.out_image
+    else:
+        out_image="/tmp/out_merge.jpg"
+
+    foo, file_extension = os.path.splitext(out_image)
+    file_extension = file_extension.lower()
+
+    if options.out_color_depth == "auto":
+        if mrg.get_resulting_image().color_depth == 16 and file_extension in get_16bit_support():
+            out_color_depth = 16
+        else:
+            out_color_depth = 8
+    else:
+        out_color_depth = int(options.out_color_depth)
+
+    wif.set_image_parameters( format=file_extension, color_depth=out_color_depth )    
+    mrg.save_resulting_image( out_image, wif )
     
     
 if __name__ == '__main__':

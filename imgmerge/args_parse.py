@@ -30,13 +30,20 @@ def args_parse():
     parser.add_argument("-o", "--out_image",
         action="store",
         dest="out_image",
-        help="")   
+        help="")  
+
+    parser.add_argument("-ocd", "--out_color_depth",
+        action="store",
+        choices=["8", "16", "auto"],
+        default="auto",
+        dest="out_color_depth",
+        help="")  
 
     parser.add_argument("-a", "--algorithm",
         action="store",
-        choices=["avg", "average", "ru", "remove_unwanted"],
+        choices=["avg", "average", "re", "remove_extraneous"],
         default="avg",
         dest="algorithm",
-        help="")   
+        help="")
 
     return parser.parse_args()       

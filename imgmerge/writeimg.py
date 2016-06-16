@@ -100,5 +100,5 @@ class WriteImageExtended( WriteImageVirtual ):
         
         imagearr.un_normalize()
         
-        imageio.imwrite( file_name, imagearr.get_uint_array( tdepth=self.out_color_depth ), self.image_fmt_arguments )
+        imageio.imwrite( self.file_name, imagearr.get_uint_array( tdepth=self.out_color_depth ), None )
         

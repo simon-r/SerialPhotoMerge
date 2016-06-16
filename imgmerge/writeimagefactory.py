@@ -16,6 +16,9 @@
 
 from imgmerge.writeimg import *
 
+def get_16bit_support():
+    return [ ".tif", ".tiff" ]
+
 class WriteImageFactory( object ):
     def __init__(self):
         self._default_wi = None
@@ -27,16 +30,19 @@ class WriteImageFactory( object ):
     def remove_default(self):
         self._default_wi = None
 
-    def set_image_parameters(self, format="jpg", color_depth=8, lossy=True, **kwargs ):
-        if format in [ "jpg", "jpeg" ]:
-            self._chosen_wi = WriteImageBasic()
-            return 
-        elif format in [ "png" ]:
+    def set_image_parameters(self, format=".jpg", color_depth=8, lossy=True, **kwargs ):
+        
+        if not color_depth:
+            color_depth = 8 
+        
+        if format in [ ".jpg", ".jpeg" ]:
+            self._chosen_wi = WriteImageBasic() 
+        elif format in [ ".png" ]:
             if color_depth == 8 and len( kwargs ) == 0:
                 self._chosen_wi = WriteImageBasic()
             elif color_depth in [8] or len(kwargs) > 0:
                 self._chosen_wi = WriteImageExtended()
-        elif format in [ "tif", "tiff" ]:
+        elif format in [ ".tif", ".tiff" ]:
             if color_depth == 8 and len( kwargs ) == 0:
                 self._chosen_wi = WriteImageBasic()
             elif color_depth in [8, 16] or len(kwargs) > 0:
