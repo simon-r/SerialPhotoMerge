@@ -35,18 +35,26 @@ class WriteImageFactory( object ):
         if not color_depth:
             color_depth = 8 
         
-        if format in [ ".jpg", ".jpeg" ]:
-            self._chosen_wi = WriteImageBasic() 
-        elif format in [ ".png" ]:
-            if color_depth == 8 and len( kwargs ) == 0:
-                self._chosen_wi = WriteImageBasic()
-            elif color_depth in [8] or len(kwargs) > 0:
-                self._chosen_wi = WriteImageExtended()
-        elif format in [ ".tif", ".tiff" ]:
-            if color_depth == 8 and len( kwargs ) == 0:
-                self._chosen_wi = WriteImageBasic()
-            elif color_depth in [8, 16] or len(kwargs) > 0:
-                self._chosen_wi = WriteImageExtended()
+        try:
+            if format in [ ".jpg", ".jpeg" ]:
+                self._chosen_wi = WriteImageBasic() 
+            elif format in [ ".png" ]:
+                if color_depth == 8 and len( kwargs ) == 0:
+                    self._chosen_wi = WriteImageBasic()
+                elif color_depth in [8] or len(kwargs) > 0:
+                    self._chosen_wi = WriteImageExtended()
+            elif format in [ ".tif", ".tiff" ]:
+                if color_depth == 8 and len( kwargs ) == 0:
+                    self._chosen_wi = WriteImageBasic()
+                elif color_depth in [8, 16] or len(kwargs) > 0:
+                    self._chosen_wi = WriteImageExtended()
+        except UnsupportedWriterException as exc:
+            print("!!Warning!! 16bit tiff format is not supported; you must install imageio (https://github.com/imageio/imageio) for the support!")
+            print("!! The resulting image will be written in 8bit")
+            self._chosen_wi = WriteImageBasic()
+            color_depth = 8 
+
+
 
         if len(kwargs) > 0 :
             self._chosen_wi.image_fmt_arguments = kwargs

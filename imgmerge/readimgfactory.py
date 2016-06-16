@@ -18,7 +18,12 @@ from imgmerge.readimg import ReadImageBasic, ReadImageRaw
 
 class ReadImageFarctory( object ):
     def __init__(self):
-        self._img_reads = [ ReadImageBasic() , ReadImageRaw() ]
+        self._img_reads = [ ReadImageBasic() ]
+        try:
+            self._img_reads.append( ReadImageRaw() )
+        except:
+            print("!!Warning!! RAW formats are not supported; you must install rawpy (https://github.com/neothemachine/rawpy) for the support!")
+
         self._default_reader = self._img_reads[0]
         self._force_dafault = False
 

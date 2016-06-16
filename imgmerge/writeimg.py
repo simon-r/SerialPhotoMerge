@@ -84,11 +84,17 @@ class WriteImageBasic( WriteImageVirtual ):
         imsave( self.file_name, imagearr.get_uint_array( tdepth=8 ) )
 
 
+class UnsupportedWriterException( Exception ):
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
+
 class WriteImageExtended( WriteImageVirtual ):
     def __init__(self):
         super().__init__()
         if not imported_imageio :
-            raise Exception( " %s , imageio library is not installed: " % sys._getframe().f_code.co_name )
+            raise UnsupportedWriterException( " %s , imageio library is not installed: " % sys._getframe().f_code.co_name )
         
     def write(self, imagearr,  file_name=None):
         if file_name != None :
