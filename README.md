@@ -34,23 +34,23 @@ Observation: The images that don't fit in size and color depth of the first imag
 
 0. Compute the average of the images in the directory "/myimagecollection/serial/" and save the result in the default file: "/tmp/out_merge.jpg"
 <pre>
-> ./image_merge -d /myimagecollection/serial/
+> ./serial_photo_merge -d /myimagecollection/serial/
 </pre>
 
 1. Compute the average of the images in the directory "/myimagecollection/serial/" and save the result in "/tmp/r.tif" 
 if the imput images are in RAW the resulting r.tif will be written in 16bit.
 <pre>
-> ./image_merge -d /myimagecollection/serial/ -o /tmp/r.tif -ocd auto
+> ./serial_photo_merge -d /myimagecollection/serial/ -o /tmp/r.tif -ocd auto
 </pre>
 
 2. Force the output tif to 16bit:
 <pre>
-> ./image_merge -d /myimagecollection/serial/ -o /tmp/r.tif -ocd 16
+> ./serial_photo_merge -d /myimagecollection/serial/ -o /tmp/r.tif -ocd 16
 </pre>
 
 2. Remove extraneous elements (slow at the moment; max 3 or 4 images)
 <pre>
-> ./image_merge -d /myimagecollection/serial/ -o /tmp/r.jpg -a re
+> ./serial_photo_merge -d /myimagecollection/serial/ -o /tmp/r.jpg -a re
 </pre>
 
 <h3>Requirements</h3>
@@ -63,7 +63,7 @@ imageio: https://github.com/imageio/imageio (optional)<br>
 
 <h3>Optional arguments </h3>
 <br>
-usage: image_merge [-h] [-d DIR_IN] [-o OUT_IMAGE] [-ocd {8,16,auto}]<br>
+usage: serial_photo_merge [-h] [-d DIR_IN] [-o OUT_IMAGE] [-ocd {8,16,auto}]<br>
                    [-a {avg,average,re,remove_extraneous}]<br>
 <br>
 optional arguments:<br>
