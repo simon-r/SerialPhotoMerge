@@ -1,5 +1,5 @@
 
-# ImageMerge
+# Serial Photo Merge
 # Copyright (C) 2012  Simone Riva mail: simone.rva {at} gmail {dot} com
 #
 #This program is free software: you can redistribute it and/or modify

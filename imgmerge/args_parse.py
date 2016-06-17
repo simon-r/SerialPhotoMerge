@@ -1,4 +1,4 @@
-# ImageMerge
+# Serial Photo Merge
 # Copyright (C) 2012  Simone Riva mail: simone.rva {at} gmail {dot} com
 #
 #This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@ import argparse
 
 def args_parse():
     desc = """ 
-    ImageMerge is a python3 tool for computing the average of an unlimited number of images. ImageMerge (ideally) do not load in memory all the images so it can work with a very big numbers of images. It is useful for creating a daylight very long exposure photography.
+    Serial Photo Merge is a python3 tool for computing the average of an unlimited number of images. ImageMerge (ideally) do not load in memory all the images so it can work with a very big numbers of images. It is useful for creating a daylight very long exposure photography.
     """
 
     parser = argparse.ArgumentParser( description=desc  )
