@@ -29,6 +29,31 @@ class MergeAverageImage( MergeProcedureVirtual ):
         super().__init__()
         #self._resimg = None
     
+
+    def execute_new(self): ##### new version
+        self.resulting_image = None
+        f_first = True 
+
+        img_cnt = 0.0
+        for itr_img in self.images_iterator :
+
+            img_cnt += 1.0
+
+            if f_first:
+               self.resulting_image = itr_img.image_class
+               f_first = False
+               continue
+
+            read_image = itr_img.image_class
+
+            if read_image.shape != self.resulting_image.shape:
+               img_cnt -= 1.0
+               continue 
+
+            self.resulting_image.add( read_image )
+
+        self.resulting_image.image[:] = self.resulting_image.image[:] / img_cnt
+
     def execute(self):
         
         readimg = None

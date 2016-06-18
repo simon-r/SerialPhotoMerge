@@ -82,5 +82,5 @@ class ImagesIterator( object ):
     def get_image_class(self):
         return self._image
 
-    image = property( get_image_class )
+    image_class = property( get_image_class )
         
