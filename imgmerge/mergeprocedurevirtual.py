@@ -41,7 +41,7 @@ class MergeProcedureVirtual( object ):
     def set_images_iterator(self, img_itr):
         self._images_iterator = img_itr 
 
-    def get_images_iterator(self, img_itr):
+    def get_images_iterator(self):
         return self._images_iterator 
 
     images_iterator = property(get_images_iterator, set_images_iterator)

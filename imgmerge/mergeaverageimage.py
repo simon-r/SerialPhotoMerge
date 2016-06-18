@@ -30,7 +30,7 @@ class MergeAverageImage( MergeProcedureVirtual ):
         #self._resimg = None
     
 
-    def execute_new(self): ##### new version
+    def execute(self): ##### new version
         self.resulting_image = None
         f_first = True 
 
@@ -40,21 +40,21 @@ class MergeAverageImage( MergeProcedureVirtual ):
             img_cnt += 1.0
 
             if f_first:
-               self.resulting_image = itr_img.image_class
+               self.resulting_image = itr_img
                f_first = False
                continue
 
-            read_image = itr_img.image_class
-
-            if read_image.shape != self.resulting_image.shape:
+            if itr_img.shape != self.resulting_image.shape:
                img_cnt -= 1.0
                continue 
 
-            self.resulting_image.add( read_image )
+            self.resulting_image.add( itr_img )
 
         self.resulting_image.image[:] = self.resulting_image.image[:] / img_cnt
 
-    def execute(self):
+
+
+    def _execute(self):
         
         readimg = None
         

@@ -23,6 +23,7 @@ from imgmerge.mergeremoveextraneous import MergeRemoveExtraneous
 from imgmerge.mergeaverageimage import MergeAverageImage
 from imgmerge.args_parse import args_parse
 from imgmerge.writeimagefactory import WriteImageFactory, get_16bit_support
+from imgmerge.imagesiterator import ImagesIterator
 
 
 def main():
@@ -36,7 +37,7 @@ def main():
 
     wif = WriteImageFactory()
 
-
+    img_itr = ImagesIterator()
     
     merge_procedure = None
     if options.algorithm in ["avg", "average"]:
@@ -46,6 +47,9 @@ def main():
 
     dr = os.listdir(dn)
     
+    img_itr.from_directory( dn )
+    merge_procedure.images_iterator = img_itr 
+
     mrg = ImageMerge()
     
     for fn in dr:

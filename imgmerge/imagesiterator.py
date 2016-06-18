@@ -43,12 +43,14 @@ class ImagesIterator( object ):
             raise StopIteration
 
         while True:
-            try:
+            try:   
                 readimg = self._read_img_factory.get_readimage( self._imgs_list[self._index] )
                 self._image = readimg.read()
                 break
             except:
                 self._index += 1
+                if self._index >= len( self._imgs_list ) :
+                    raise StopIteration
 
         self._index += 1
         return self._image
@@ -61,7 +63,9 @@ class ImagesIterator( object ):
             self._imgs_list.append(el)
 
     def from_directory(self, in_dir):
-        self._imgs_list = os.listdir(dn)
+        self._imgs_list = []
+        for file_name in  os.listdir( in_dir):
+            self._imgs_list.append( os.path.join( os.path.abspath( in_dir ) , file_name ) )
 
     def set_reference_image(self, file_name ):
         self._refimage = file_name
