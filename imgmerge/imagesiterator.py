@@ -39,6 +39,9 @@ class ImagesIterator( object ):
         return self
 
     def __next__(self):
+        if self._index >= len( self._imgs_list ) :
+            raise StopIteration
+
         while True:
             try:
                 readimg = self._read_img_factory.get_readimage( self._imgs_list[self._index] )
@@ -74,5 +77,10 @@ class ImagesIterator( object ):
     def set_read_image_factory(self, rif):
         self._read_img_factory = rif
 
-    read_image_factory = property(get_read_image_factory, set_read_image_factory)    
+    read_image_factory = property(get_read_image_factory, set_read_image_factory)
+
+    def get_image_class(self):
+        return self._image
+
+    image = property( get_image_class )
         
