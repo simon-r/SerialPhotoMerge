@@ -35,7 +35,16 @@ class MergeProcedureVirtual( object ):
         self._img_list = None
         self._resimg = None
         self._refimage = None
+        self._images_iterator = None
         self._read_img_factory = ReadImageFarctory()
+
+    def set_images_iterator(self, img_itr):
+        self._images_iterator = img_itr 
+
+    def get_images_iterator(self, img_itr):
+        return self._images_iterator 
+
+    images_iterator = property(get_images_iterator, set_images_iterator)
 
     def set_images_list(self, img_list):
         self._img_list = img_list 
