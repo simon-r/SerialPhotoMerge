@@ -29,7 +29,7 @@ class MergeRemoveExtraneous( MergeProcedureVirtual ):
     def __init__(self):
         super().__init__()
     
-    def _execute(self):
+    def execute(self):
         self.resulting_image = None
         f_first = True 
 
@@ -37,10 +37,10 @@ class MergeRemoveExtraneous( MergeProcedureVirtual ):
         shape = resimg.shape
 
         resimg.image[:] = 2**resimg.color_depth / 2 
-        avrimg = Image( ishape=shape , dtype=readimg.dtype )
-        std = np.zeros( shape[:2] , dtype=readimg.dtype ) + 2**resimg.color_depth
+        avrimg = Image( ishape=shape , dtype=resimg.dtype )
+        std = np.zeros( shape[:2] , dtype=resimg.dtype ) + 2**resimg.color_depth
         
-        dist = np.zeros( shape[:2] , dtype=readimg.dtype ) 
+        dist = np.zeros( shape[:2] , dtype=resimg.dtype ) 
         flags = np.zeros( shape[:2] , dtype=np.bool8 )
     
         iter_cnt = 5         
@@ -87,7 +87,7 @@ class MergeRemoveExtraneous( MergeProcedureVirtual ):
 
                 
 
-    def execute(self):
+    def _execute(self):
         readimg = None
         
         if len( self.images_list ) == 0 :
