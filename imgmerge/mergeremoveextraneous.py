@@ -29,6 +29,64 @@ class MergeRemoveExtraneous( MergeProcedureVirtual ):
     def __init__(self):
         super().__init__()
     
+    def _execute(self):
+        self.resulting_image = None
+        f_first = True 
+
+        resimg = self.images_iterator.read_reference_image()
+        shape = resimg.shape
+
+        resimg.image[:] = 2**resimg.color_depth / 2 
+        avrimg = Image( ishape=shape , dtype=readimg.dtype )
+        std = np.zeros( shape[:2] , dtype=readimg.dtype ) + 2**resimg.color_depth
+        
+        dist = np.zeros( shape[:2] , dtype=readimg.dtype ) 
+        flags = np.zeros( shape[:2] , dtype=np.bool8 )
+    
+        iter_cnt = 5         
+        
+        for itr in range( iter_cnt ) :
+            invalid_imgs = []
+            img_cnt = 0.0
+
+            for imgarr in self.images_iterator :
+
+                if shape != imgarr.shape :
+                    self.images_iterator.discard_image()
+                    continue
+
+                img_cnt += 1 
+
+                dist[:] = np.sqrt( 
+                            np.power( resimg.image[:,:,0] - imgarr.image[:,:,0] , 2 ) + 
+                            np.power( resimg.image[:,:,1] - imgarr.image[:,:,1] , 2 ) + 
+                            np.power( resimg.image[:,:,2] - imgarr.image[:,:,2] , 2 ) )
+                
+                flags[:] = False
+                flags[:] = dist[:] < std[:] / np.exp( np.float( itr ) / 10.0 )
+                
+                avrimg.image[flags] = avrimg.image[flags] + imgarr.image[flags]
+                
+                flags[:] = np.logical_not( flags ) 
+                avrimg.image[flags] = avrimg.image[flags] + resimg.image[flags]
+
+            resimg.image[:] = avrimg.image[:] / img_cnt
+            std[:] = 0.0
+
+            for imgarr in self.images_iterator :
+                
+                std[:] = ( std[:] +
+                           ( np.power( resimg.image[:,:,0] - imgarr.image[:,:,0] , 2 ) + 
+                             np.power( resimg.image[:,:,1] - imgarr.image[:,:,1] , 2 ) + 
+                             np.power( resimg.image[:,:,2] - imgarr.image[:,:,2] , 2 ) ) )
+
+            std[:] = np.sqrt( std[:] / img_cnt )
+            avrimg.image[:] = 0.0   
+
+        self.resulting_image = resimg                                                            
+
+                
+
     def execute(self):
         readimg = None
         
@@ -90,7 +148,6 @@ class MergeRemoveExtraneous( MergeProcedureVirtual ):
                     invalid_imgs.append(img) 
                 
             resimg.image[:] = avrimg.image[:] / img_cnt
-            
             std[:] = 0.0 
             
             for inv in invalid_imgs :

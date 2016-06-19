@@ -26,8 +26,9 @@ class ImagesIterator( object ):
         self._read_img_factory = ReadImageFarctory()
         self._image = None
         self._index = 0 
-        self._refimage = None
+        self._in_dir = None
         self._reference_image = None # file name
+        self._discarded_files = []
 
     def __iter__(self):
         if self._reference_image:
@@ -64,16 +65,46 @@ class ImagesIterator( object ):
 
     def from_directory(self, in_dir):
         self._imgs_list = []
-        for file_name in  os.listdir( in_dir):
+        self._in_dir = in_dir
+        for file_name in  os.listdir( in_dir ):
             self._imgs_list.append( os.path.join( os.path.abspath( in_dir ) , file_name ) )
 
     def set_reference_image(self, file_name ):
-        self._refimage = file_name
+        if self._in_dir:
+            self._reference_image = os.path.join( os.path.abspath( self._in_dir ) , file_name )
+        else:
+            self._reference_image = file_name
 
     def get_reference_image(self):
-        return self._refimage
+        return self._reference_image
 
     reference_image = property(get_reference_image, set_reference_image )
+
+    def read_reference_image(self):
+        if self.reference_image:
+            readimg = self._read_img_factory.get_readimage( self.reference_image )
+            return readimg.read()
+
+        index = 0 
+        while True:
+            try:   
+                readimg = self._read_img_factory.get_readimage( self._imgs_list[index] )
+                image = readimg.read()
+                return image
+            except:
+                index += 1
+                if index >= len( self._imgs_list ) :
+                    return None
+        
+
+    def discard_file(self, fr=None):
+        if not fr:
+            self._discarded_files.append( self._index )
+        else:
+            self._discarded_files.append( fr )
+
+    def clean_file_list(self):
+        pass
 
     def get_read_image_factory(self):
         return self._read_img_factory
