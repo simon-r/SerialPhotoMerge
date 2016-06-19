@@ -31,6 +31,9 @@ class ImagesIterator( object ):
         self._discarded_files = []
 
     def __iter__(self):
+
+        self.clean_files_list()
+
         if self._reference_image:
             self._imgs_list = list( filter( (self._reference_image).__ne__, self._imgs_list ))
             self._imgs_list = [self._reference_image] + self._imgs_list
@@ -103,8 +106,15 @@ class ImagesIterator( object ):
         else:
             self._discarded_files.append( fr )
 
-    def clean_file_list(self):
-        pass
+    def clean_files_list(self):
+        for e in self._discarded_files:
+            if isinstance(e, int ):
+                del self._imgs_list[e]
+            elif isinstance( e, str ):
+                self._imgs_list.remove( e )
+
+        self._discarded_files = []
+
 
     def get_read_image_factory(self):
         return self._read_img_factory
