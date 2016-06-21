@@ -18,6 +18,7 @@ from imgmerge.mergeprocedurevirtual import *
 
 import numpy as np
 import sys
+import time
 
 import scipy.ndimage as ndimage
 from imgmerge.readimg import ReadImageBasic
@@ -50,7 +51,7 @@ class MergeRemoveExtraneous( MergeProcedureVirtual ):
             img_cnt = 0.0
 
             for imgarr in self.images_iterator :
-
+                
                 if shape != imgarr.shape :
                     self.images_iterator.discard_image()
                     continue
@@ -61,14 +62,18 @@ class MergeRemoveExtraneous( MergeProcedureVirtual ):
                             np.power( resimg.image[:,:,0] - imgarr.image[:,:,0] , 2 ) + 
                             np.power( resimg.image[:,:,1] - imgarr.image[:,:,1] , 2 ) + 
                             np.power( resimg.image[:,:,2] - imgarr.image[:,:,2] , 2 ) )
-                
+    
+                ca = time.clock()
                 flags[:] = False
                 flags[:] = dist[:] < std[:] / np.exp( np.float( itr ) / 10.0 )
-                
+
                 avrimg.image[flags] = avrimg.image[flags] + imgarr.image[flags]
                 
                 flags[:] = np.logical_not( flags ) 
                 avrimg.image[flags] = avrimg.image[flags] + resimg.image[flags]
+
+                cb = time.clock()
+                print( cb- ca )
 
             resimg.image[:] = avrimg.image[:] / img_cnt
             std[:] = 0.0

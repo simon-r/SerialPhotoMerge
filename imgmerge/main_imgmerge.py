@@ -23,7 +23,7 @@ from imgmerge.mergeremoveextraneous import MergeRemoveExtraneous
 from imgmerge.mergeaverageimage import MergeAverageImage
 from imgmerge.args_parse import args_parse
 from imgmerge.writeimagefactory import WriteImageFactory, get_16bit_support
-from imgmerge.imagesiterator import ImagesIterator
+from imgmerge.imagesiterator import ImagesIterator, ImagesRandomIterator
 
 
 def main():
@@ -44,6 +44,7 @@ def main():
         merge_procedure = MergeAverageImage()
     elif options.algorithm in ["re", "remove_extraneous"]:
         merge_procedure = MergeRemoveExtraneous()
+        img_itr = ImagesRandomIterator()
 
     dr = os.listdir(dn)
     

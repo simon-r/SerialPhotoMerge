@@ -15,10 +15,11 @@
 #along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-from imgmerge.image import Image
+import random
 
 from imgmerge.image import Image
 from imgmerge.readimgfactory import ReadImageFarctory
+
 
 class ImagesIterator( object ):
     def __init__(self):
@@ -71,6 +72,11 @@ class ImagesIterator( object ):
         self._in_dir = in_dir
         for file_name in  os.listdir( in_dir ):
             self._imgs_list.append( os.path.join( os.path.abspath( in_dir ) , file_name ) )
+
+    def get_images_list(self):
+        return self._imgs_list
+
+    images_list = property( fget=get_images_list )
 
     def set_reference_image(self, file_name ):
         if self._in_dir:
@@ -128,4 +134,57 @@ class ImagesIterator( object ):
         return self._image
 
     image_class = property( get_image_class )
-        
+
+
+class ImagesRandomIterator( ImagesIterator ):
+    def __init__(self):
+        super().__init__()
+        self._el_dict = {} 
+        self._first = True 
+        self._key_ref = None
+
+    def __iter__(self):
+        self.clean_files_list()
+        self._first = True 
+        k = 0
+
+        self._el_dict = {}
+        self._key_ref = None 
+
+        for im in self.images_list :
+            self._el_dict[k] = im
+            k+=1
+            if self.reference_image == im:
+                self._key_ref = k
+
+        return self
+
+    def __next__(self):
+        if len( self._el_dict ) == 0:
+            raise StopIteration
+
+        if self._first and self.reference_image:
+            f_name = self._el_dict[ self._key_ref ]
+            del self._el_dict[ self._key_ref ]
+
+            readimg = self._read_img_factory.get_readimage( f_name )
+            self._image = readimg.read()
+            return self._image
+
+        self._first = False
+
+        while True:
+            try:   
+                k = random.choice( list( self._el_dict.keys() ) )
+                f_name = self._el_dict[k]
+                #print( f_name )
+                del self._el_dict[k]
+
+                readimg = self._read_img_factory.get_readimage( f_name )
+                self._image = readimg.read()
+                break
+            except:
+                if len( self._el_dict ) == 0:
+                    raise StopIteration
+
+        return self._image        
