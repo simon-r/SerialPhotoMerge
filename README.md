@@ -20,7 +20,7 @@ After this you should use Serial Photo Merge for combining the images and obtain
 <h3>Advantages of Serial Photo Merge respect to the classical ND filters:</h3>
 1. Improve the DR of your images.
 2. Day light extreme long exposure.
-3. Better flexibilty in setting the aperture and exposure time of your camera.
+3. Better flexibilty in settings the aperture and exposure time of your camera.
 4. Better capacity in controlling situations with a difficult light. 
 
 <h3>Advantages of Serial Photo Merge respect to others software [like photoshop or imagemagik]</h3>
