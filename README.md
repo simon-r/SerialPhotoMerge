@@ -14,14 +14,14 @@ Serial Photo Merge (ideally) do not load in memory all the images so it can work
 </ul>
 
 <h3>How to</h3>
-Take your photo-camera, a good quality tripod and, if necessary, a ND filter, and shot a lot of images of the same subject.
-After this you should use Serial Photo Merge for combining the images and obtaining the effect of a super long exposure; also in full day light.
+Take your photo-camera, a good quality tripod and, if necessary, an ND filter, mount the camera on the tripod and shot a lot of images of the same subject.
+After this you should use Serial Photo Merge for combining the images and obtaining the effect of a super long exposure; also in a full day light.
 
 <h3>Advantages of Serial Photo Merge respect to the classical ND filters:</h3>
 1. Improve the DR of your images.
-2. Day light extremely long exposure.
+2. Day light extreme long exposure.
 3. Better flexibilty in setting the aperture and exposure time of your camera.
-4. Better capacity in controlling the situations with a difficult light. 
+4. Better capacity in controlling situations with a difficult light. 
 
 <h3>Advantages of Serial Photo Merge respect to others software [like photoshop or imagemagik]</h3>
 Photoshop and Imagemagik load into memory all the images before computing the average, so the maximal number of images is limited by your installed RAM.
