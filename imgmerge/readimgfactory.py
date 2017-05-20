@@ -1,26 +1,28 @@
 # Serial Photo Merge
-# Copyright (C) 2012  Simone Riva mail: simone.rva {at} gmail {dot} com
+# Copyright (C) 2017  Simone Riva mail: simone.rva {at} gmail {dot} com
 #
-#This program is free software: you can redistribute it and/or modify
-#it under the terms of the GNU General Public License as published by
-#the Free Software Foundation, either version 3 of the License, or
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
 #(at your option) any later version.
 #
-#This program is distributed in the hope that it will be useful,
-#but WITHOUT ANY WARRANTY; without even the implied warranty of
-#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#GNU General Public License for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-#You should have received a copy of the GNU General Public License
-#along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from imgmerge.readimg import ReadImageBasic, ReadImageRaw
 
-class ReadImageFarctory( object ):
+
+class ReadImageFarctory(object):
+
     def __init__(self):
-        self._img_reads = [ ReadImageBasic() ]
+        self._img_reads = [ReadImageBasic()]
         try:
-            self._img_reads.append( ReadImageRaw() )
+            self._img_reads.append(ReadImageRaw())
         except:
             print("!!Warning!! RAW formats are not supported; you must install rawpy (https://github.com/neothemachine/rawpy) for the support!")
 
@@ -38,8 +40,8 @@ class ReadImageFarctory( object ):
     def get_force_default(self):
         return self._force_dafault
 
-    def set_force_dafault(self,f):
-        self._force_dafault = f 
+    def set_force_dafault(self, f):
+        self._force_dafault = f
 
     force_default = property(get_force_default, set_force_dafault)
 
@@ -48,13 +50,11 @@ class ReadImageFarctory( object ):
             self._default_reader.file_name = file_name
             return self._default_reader
 
-        for reader in self._img_reads :
-            if reader.is_supported( file_name ):
+        for reader in self._img_reads:
+            if reader.is_supported(file_name):
                 reader.file_name = file_name
                 return reader
 
-        raise Exception("%s : Image file format not supported." % sys._getframe().f_code.co_name )
+        raise Exception("%s : Image file format not supported." %
+                        sys._getframe().f_code.co_name)
         return None
-
-    
-    
