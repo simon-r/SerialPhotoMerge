@@ -10,5 +10,7 @@ build/
 .project
 *.jpg
 *.pp3
+tags
+
 
 
