@@ -21,7 +21,11 @@ import sys
 
 import scipy.ndimage as ndimage
 
-from pycuda import gpuarray
+try:
+    import pycuda.autoinit
+    from pycuda import gpuarray
+except:
+    pass
 
 from imgmerge.readimg import ReadImageBasic
 from imgmerge.image import Image
@@ -65,6 +69,7 @@ class MergeAverageImageCUDA(MergeProcedureVirtual):
 
     def execute(self):
         resulting_image = None
+        nda = None
         f_first = True
 
         img_cnt = 0
@@ -73,8 +78,15 @@ class MergeAverageImageCUDA(MergeProcedureVirtual):
             img_cnt += 1
 
             if f_first:
-                resulting_image = gpuarray.to_gpu(itr_img)
-                current_image = gpuarray.zeros_like(self.resulting_image)
+                nda = np.ndarray(shape=itr_img.image.shape,
+                                 dtype=itr_img.image.dtype)
+
+                nda[:] = itr_img.image[:]
+
+                self.resulting_image = itr_img
+                resulting_image = gpuarray.to_gpu(nda)
+
+                current_image = gpuarray.zeros_like(resulting_image)
                 f_first = False
                 shape = itr_img.shape
                 continue
@@ -83,10 +95,10 @@ class MergeAverageImageCUDA(MergeProcedureVirtual):
                 img_cnt -= 1
                 continue
 
-            current_image.set(itr_img)
+            current_image.set(itr_img.image)
 
-            resulting_image[:] += current_image[:]
+            resulting_image += current_image
 
-        resulting_image[:] /= img_cnt
+        resulting_image /= img_cnt
 
-        self.resulting_image = resulting_image.get()
+        self.resulting_image.image[:] = resulting_image.get()

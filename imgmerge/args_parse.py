@@ -51,4 +51,9 @@ def args_parse():
                         "avg|average: Average of the images "
                         "re|remove_extraneous: remove extraneous elements")
 
+    parser.add_argument("-c", "--cuda",
+                        action="store_true",
+                        dest="cuda",
+                        help="Uses CUDA if possible")
+
     return parser.parse_args()
