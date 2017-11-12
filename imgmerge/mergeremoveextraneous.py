@@ -106,12 +106,73 @@ class MergeRemoveExtraneousCUDA(MergeProcedureVirtual):
     def __init_kernel_dist_colors(self):
         self.__kernel_dist_colors =
         """
-        __global__ void dist_colors(float *imgarr, float *avrimg, float w=10.0)
+        __global__ void dist_colors(float *imgarr, 
+                                    float *resimg, 
+                                    float *avrimg, 
+                                    float *std, 
+                                    int size_x, int size_y, 
+                                    int itr, float w=10.0)
         {
-            const int i = threadIdx.x;
-            dest[i] = a[i] * b[i];
+            int x = threadIdx.x + blockIdx.x * blockDim.x;
+            int y = threadIdx.y + blockIdx.y * blockDim.y;
+            int offset = x + y * blockDim.x * gridDim.x;
+
+            if ( x < size_x and y < size_y ) {
+                int ia_red = 3*offset ;
+                int ia_green = 3*offset + 1;
+                int ia_blue = 3*offset + 2;
+
+                float dist;
+
+                dist = sqrtf( 
+                            powf( resimg[ia_red] - imgarr[ia_red], 2.0) +
+                            powf( resimg[ia_green] - imgarr[ia_green], 2.0) +
+                            powf( resimg[ia_blue] - imgarr[ia_blue], 2.0));
+
+                bool flag = false ;
+
+                if(dist < std[offset] / expf(itr) / w);
+                    flag = true;
+
+                if(flag){
+                    avrimg[ia_red] = avrimg[ia_red] + imgarr[ia_red];
+                    avrimg[ia_green] = avrimg[ia_green] + imgarr[ia_green];
+                    avrimg[ia_blue] = avrimg[ia_blue] + imgarr[ia_blue];
+                }
+
+                if(not flag){
+                    avrimg[ia_red] = avrimg[ia_red] + resimg[ia_red];
+                    avrimg[ia_green] = avrimg[ia_green] + resimg[ia_green];
+                    avrimg[ia_blue] = avrimg[ia_blue] + resimg[ia_blue];
+                }
+            }               
         }
         """
+
+    def __init_kernel_std(self):
+        self.__kernel_std =
+        """
+        __global__ void std(float *imgarr, 
+                            float *resimg, 
+                            float *std, 
+                            int size_x, int size_y)
+        {
+            int x = threadIdx.x + blockIdx.x * blockDim.x;
+            int y = threadIdx.y + blockIdx.y * blockDim.y;
+            int offset = x + y * blockDim.x * gridDim.x;
+
+            if ( x < size_x and y < size_y ) {
+                int ia_red = 3*offset ;
+                int ia_green = 3*offset + 1;
+                int ia_blue = 3*offset + 2;
+
+                std[offset] = std[offset] +
+                                powf( resimg[ia_red] - imgarr[ia_red], 2.0) +
+                                powf( resimg[ia_green] - imgarr[ia_green], 2.0) +
+                                powf( resimg[ia_blue] - imgarr[ia_blue], 2.0) ;
+            }
+        """
+
 
     def execute(self):
         self.resulting_image = None
