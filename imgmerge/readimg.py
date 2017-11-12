@@ -34,6 +34,7 @@ class ReadImageVirtual(object):
         self._dtype = np.float32
         self._file_name = None
         self._supported_formats = []
+        self._raw = None
 
     def set_file_name(self, file_name):
         self._file_name = file_name
@@ -46,6 +47,12 @@ class ReadImageVirtual(object):
 
     def get_dtype(self):
         return self._dtype
+
+    def get_raw(self):
+        return self._raw
+
+    def set_raw(self, raw):
+        self._raw = raw
 
     def get_supported_formats(self):
         NotImplementedError(
@@ -67,6 +74,8 @@ class ReadImageVirtual(object):
     file_name = property(get_file_name, set_file_name)
 
     supported_formats = property(get_supported_formats)
+
+    raw = property(get_raw, set_raw)
 
     def read(self, file_name):
         NotImplementedError(
@@ -92,8 +101,8 @@ class ReadImageBasic(ReadImageVirtual):
 
         img_rgb = Image(color_depth=8)
 
-        img_rgb.image = np.array(ndimage.imread(
-            self.file_name), dtype=img_rgb.dtype)
+        self.raw = ndimage.imread(self.file_name)
+        img_rgb.image = np.array(self.raw, dtype=img_rgb.dtype)
 
         return img_rgb
 
@@ -144,9 +153,26 @@ class ReadImageRaw(ReadImageVirtual):
                             sys._getframe().f_code.co_name)
 
         rgb = Image(color_depth=16)
+        raw = None
 
         with rawpy.imread(self.file_name) as raw:
-            rgb.image = np.array(raw.postprocess(
-                output_bps=16), dtype=rgb.dtype)
+            self.raw = raw.postprocess(output_bps=16)
+            rgb.image = np.array(self.raw, dtype=rgb.dtype)
+
+        return rgb
+
+
+class ReadImageArray(ReadImageVirtual):
+    def __init__(self):
+        ReadImageVirtual.__init__(self)
+        self.__nparray = None
+
+    def set_array(self, nparray):
+        self.__nparray = np.array(nparray)
+
+    def read(self, file_name=None):
+
+        rgb = Image(color_depth=16)
+        rgb.image = np.array(self.__nparray, dtype=rgb.dtype)
 
         return rgb
