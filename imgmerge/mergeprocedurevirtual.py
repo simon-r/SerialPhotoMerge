@@ -43,6 +43,7 @@ class MergeProcedureVirtual(object):
 
     def set_images_iterator(self, img_itr):
         self._images_iterator = img_itr
+        self._images_iterator.read_image_factory = self.read_image_factory
 
     def get_images_iterator(self):
         return self._images_iterator
@@ -70,6 +71,8 @@ class MergeProcedureVirtual(object):
 
     def set_read_image_factory(self, rif):
         self._read_img_factory = rif
+        if self.images_iterator:
+            self.images_iterator.read_image_factory = rif
 
     read_image_factory = property(
         get_read_image_factory, set_read_image_factory)
