@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from imgmerge.readimg import ReadImageBasic, ReadImageRaw
+from imgmerge.readimg import ReadImageBasic, ReadImageRaw, ReadImageArray
 
 
 class ReadImageFarctory(object):
@@ -58,3 +58,46 @@ class ReadImageFarctory(object):
         raise Exception("%s : Image file format not supported." %
                         sys._getframe().f_code.co_name)
         return None
+
+
+class ReadStoreImageFactory(ReadImageFarctory):
+
+    def __init__(self):
+        super().__init__()
+        self.__img_dict = dict()
+
+    def get_readimage(self, file_name=None):
+
+        ria = ReadImageArray()
+
+        if file_name in self.__img_dict.keys():
+            ria.set_array(self.__img_dict[file_name])
+            return ria
+
+        chosed_reader = None
+
+        if not file_name or self.force_default:
+            self._default_reader.file_name = file_name
+            chosed_reader = self._default_reader
+
+        unsupprted_format = True
+
+        if not chosed_reader:
+            for reader in self._img_reads:
+                if reader.is_supported(file_name):
+                    reader.file_name = file_name
+                    chosed_reader = reader
+                    unsupprted_format = False
+                    break
+
+        if unsupprted_format:
+            raise Exception("%s : Image file format not supported." %
+                            sys._getframe().f_code.co_name)
+
+        rgb = chosed_reader.read()
+        
+        self.__img_dict[file_name] = chosed_reader.raw
+
+        ria.set_array(self.__img_dict[file_name])
+
+        return ria
