@@ -26,7 +26,6 @@ try:
     from pycuda.compiler import SourceModule
     import pycuda.driver as drv
     import pycuda.cumath as cumath
-
 except:
     pass
 
@@ -261,7 +260,7 @@ class MergeRemoveExtraneousCUDA(MergeProcedureVirtual):
                               block=block_im, grid=grid_im)
 
             std_cu /= np.float32(img_cnt)
-            std_cu = cumath.sqrt(std_cu)
+            cumath.sqrt(std_cu, out=std_cu)
 
             avrimg_cu.fill(0.0)
 
