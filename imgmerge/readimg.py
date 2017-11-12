@@ -168,7 +168,7 @@ class ReadImageArray(ReadImageVirtual):
         self.__nparray = None
 
     def set_array(self, nparray):
-        self.__nparray = np.array(nparray)
+        self.__nparray = nparray
 
     def read(self, file_name=None):
 
