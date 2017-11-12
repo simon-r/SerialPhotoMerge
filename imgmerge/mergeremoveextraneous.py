@@ -246,7 +246,7 @@ class MergeRemoveExtraneousCUDA(MergeProcedureVirtual):
                             block=block_im, grid=grid_im)
 
                 cb = time.clock()
-                print(cb - ca)
+                print("clock: %1.4f" % (cb - ca))
 
             resimg_cu = avrimg_cu[:] / np.float32(img_cnt)
             std_cu.fill(0.0)
