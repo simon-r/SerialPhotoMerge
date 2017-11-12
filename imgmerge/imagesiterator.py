@@ -98,7 +98,8 @@ class ImagesIterator(object):
         if self.reference_image:
             readimg = self._read_img_factory.get_readimage(
                 self.reference_image)
-            return readimg.read()
+            image = readimg.read() 
+            return image
 
         index = 0
         while True:
