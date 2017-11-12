@@ -24,6 +24,7 @@ from imgmerge.mergeaverageimage import MergeAverageImage, MergeAverageImageCUDA
 from imgmerge.args_parse import args_parse
 from imgmerge.writeimagefactory import WriteImageFactory, get_16bit_support
 from imgmerge.imagesiterator import ImagesIterator, ImagesRandomIterator
+from imgmerge.readimgfactory import ReadStoreImageFactory
 
 
 def main():
@@ -54,6 +55,8 @@ def main():
         else:
             merge_procedure = MergeRemoveExtraneous()
         img_itr = ImagesRandomIterator()
+
+        #merge_procedure.read_image_factory = ReadStoreImageFactory()
 
     dr = os.listdir(dn)
 
