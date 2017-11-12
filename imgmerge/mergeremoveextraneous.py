@@ -223,6 +223,7 @@ class MergeRemoveExtraneousCUDA(MergeProcedureVirtual):
         dist_colors = mod_dist_colors.get_function("dist_colors")
         img_merge_std = mod_std.get_function("img_merge_std")
 
+        ca = time.clock()
         for itr in range(iter_cnt):
             invalid_imgs = []
             img_cnt = 0.0
@@ -233,7 +234,6 @@ class MergeRemoveExtraneousCUDA(MergeProcedureVirtual):
                     self.images_iterator.discard_image()
                     continue
 
-                ca = time.clock()
                 img_cnt += 1
                 imgarr_cu.set(imgarr.image)
 
@@ -246,7 +246,7 @@ class MergeRemoveExtraneousCUDA(MergeProcedureVirtual):
                             block=block_im, grid=grid_im)
 
                 cb = time.clock()
-                print("clock: %1.4f" % (cb - ca))
+                print("avg clock: %1.4f" % (cb - ca))
 
             resimg_cu = avrimg_cu[:] / np.float32(img_cnt)
             std_cu.fill(0.0)
@@ -258,6 +258,8 @@ class MergeRemoveExtraneousCUDA(MergeProcedureVirtual):
                               std_cu,
                               np.int32(shape[0]), np.int32(shape[1]),
                               block=block_im, grid=grid_im)
+                cb = time.clock()
+                print("std clock: %1.4f" % (cb - ca))
 
             std_cu /= np.float32(img_cnt)
             cumath.sqrt(std_cu, out=std_cu)
