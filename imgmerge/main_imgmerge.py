@@ -19,7 +19,7 @@ import os
 import sys
 
 from imgmerge.imagemerge import ImageMerge
-from imgmerge.mergeremoveextraneous import MergeRemoveExtraneous
+from imgmerge.mergeremoveextraneous import MergeRemoveExtraneous, MergeRemoveExtraneousCUDA
 from imgmerge.mergeaverageimage import MergeAverageImage, MergeAverageImageCUDA
 from imgmerge.args_parse import args_parse
 from imgmerge.writeimagefactory import WriteImageFactory, get_16bit_support
@@ -46,8 +46,13 @@ def main():
             print("CUDA")
         else:
             merge_procedure = MergeAverageImage()
+
     elif options.algorithm in ["re", "remove_extraneous"]:
-        merge_procedure = MergeRemoveExtraneous()
+        if options.cuda:
+            merge_procedure = MergeRemoveExtraneousCUDA()
+            print("CUDA")
+        else:
+            merge_procedure = MergeRemoveExtraneous()
         img_itr = ImagesRandomIterator()
 
     dr = os.listdir(dn)
