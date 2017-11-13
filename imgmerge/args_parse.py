@@ -56,4 +56,9 @@ def args_parse():
                         dest="cuda",
                         help="Uses CUDA if possible")
 
+    parser.add_argument("-sm", "--store",
+                        action="store_true",
+                        dest="store_images",
+                        help="In the algorithm ""remove extraneous"" load all images in RAM")                        
+
     return parser.parse_args()

@@ -56,7 +56,8 @@ def main():
             merge_procedure = MergeRemoveExtraneous()
         img_itr = ImagesRandomIterator()
 
-        #merge_procedure.read_image_factory = ReadStoreImageFactory()
+        if options.store_images:
+            merge_procedure.read_image_factory = ReadStoreImageFactory()
 
     dr = os.listdir(dn)
 
