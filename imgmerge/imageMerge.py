@@ -16,8 +16,8 @@
 
 import os
 
-from imgmerge.writeimg import WriteImageBasic
-from imgmerge.writeimagefactory import WriteImageFactory
+from imgmerge.writeImg import WriteImageBasic
+from imgmerge.writeImageFactory import WriteImageFactory
 
 
 class ImageMerge(object):

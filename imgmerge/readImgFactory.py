@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from imgmerge.readimg import ReadImageBasic, ReadImageRaw, ReadImageArray
+from imgmerge.readImg import ReadImageBasic, ReadImageRaw, ReadImageArray
 
 
 class ReadImageFarctory(object):

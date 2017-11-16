@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from imgmerge.mergeprocedurevirtual import *
+from imgmerge.mergeProcedureVirtual import *
 
 import numpy as np
 import sys
@@ -30,9 +30,9 @@ except:
     pass
 
 import scipy.ndimage as ndimage
-from imgmerge.readimg import ReadImageBasic
+from imgmerge.readImg import ReadImageBasic
 from imgmerge.image import Image
-from imgmerge.readimgfactory import ReadImageFarctory
+from imgmerge.readImgFactory import ReadImageFarctory
 
 
 class MergeRemoveExtraneous(MergeProcedureVirtual):

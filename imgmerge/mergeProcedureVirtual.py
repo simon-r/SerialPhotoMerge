@@ -18,9 +18,9 @@ import numpy as np
 import sys
 
 import scipy.ndimage as ndimage
-from imgmerge.readimg import ReadImageBasic
+from imgmerge.readImg import ReadImageBasic
 from imgmerge.image import Image
-from imgmerge.readimgfactory import ReadImageFarctory
+from imgmerge.readImgFactory import ReadImageFarctory
 
 #import matplotlib.pyplot as plt
 

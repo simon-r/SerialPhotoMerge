@@ -18,7 +18,7 @@ import os
 import random
 
 from imgmerge.image import Image
-from imgmerge.readimgfactory import ReadImageFarctory
+from imgmerge.readImgFactory import ReadImageFarctory
 
 
 class ImagesIterator(object):
@@ -51,9 +51,9 @@ class ImagesIterator(object):
 
         while True:
             try:
-                readimg = self._read_img_factory.get_readimage(
+                readImg = self._read_img_factory.get_readimage(
                     self._imgs_list[self._index])
-                self._image = readimg.read()
+                self._image = readImg.read()
                 break
             except:
                 self._index += 1
@@ -96,17 +96,17 @@ class ImagesIterator(object):
 
     def read_reference_image(self):
         if self.reference_image:
-            readimg = self._read_img_factory.get_readimage(
+            readImg = self._read_img_factory.get_readimage(
                 self.reference_image)
-            image = readimg.read() 
+            image = readImg.read() 
             return image
 
         index = 0
         while True:
             try:
-                readimg = self._read_img_factory.get_readimage(
+                readImg = self._read_img_factory.get_readimage(
                     self._imgs_list[index])
-                image = readimg.read()
+                image = readImg.read()
                 return image
             except:
                 index += 1
@@ -175,8 +175,8 @@ class ImagesRandomIterator(ImagesIterator):
             f_name = self._el_dict[self._key_ref]
             del self._el_dict[self._key_ref]
 
-            readimg = self._read_img_factory.get_readimage(f_name)
-            self._image = readimg.read()
+            readImg = self._read_img_factory.get_readimage(f_name)
+            self._image = readImg.read()
             return self._image
 
         self._first = False
@@ -188,8 +188,8 @@ class ImagesRandomIterator(ImagesIterator):
                 #print( f_name )
                 del self._el_dict[k]
 
-                readimg = self._read_img_factory.get_readimage(f_name)
-                self._image = readimg.read()
+                readImg = self._read_img_factory.get_readimage(f_name)
+                self._image = readImg.read()
                 break
             except:
                 if len(self._el_dict) == 0:

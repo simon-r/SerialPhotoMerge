@@ -18,13 +18,13 @@
 import os
 import sys
 
-from imgmerge.imagemerge import ImageMerge
-from imgmerge.mergeremoveextraneous import MergeRemoveExtraneous, MergeRemoveExtraneousCUDA
-from imgmerge.mergeaverageimage import MergeAverageImage, MergeAverageImageCUDA
+from imgmerge.imageMerge import ImageMerge
+from imgmerge.mergeRemoveExtraneous import MergeRemoveExtraneous, MergeRemoveExtraneousCUDA
+from imgmerge.mergeAverageImage import MergeAverageImage, MergeAverageImageCUDA
 from imgmerge.args_parse import args_parse
-from imgmerge.writeimagefactory import WriteImageFactory, get_16bit_support
-from imgmerge.imagesiterator import ImagesIterator, ImagesRandomIterator
-from imgmerge.readimgfactory import ReadStoreImageFactory
+from imgmerge.writeImageFactory import WriteImageFactory, get_16bit_support
+from imgmerge.imagesIterator import ImagesIterator, ImagesRandomIterator
+from imgmerge.readImgFactory import ReadStoreImageFactory
 
 
 def main():
